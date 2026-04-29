@@ -1,0 +1,44 @@
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: migarden_production
+    networks:
+      - migarden_network
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_ENV: production
+      DATABASE_URL: postgres://postgres:password@db:5432/migarden_production
+      EVOLUTION_API_URL: http://evolution_api:8080
+    depends_on:
+      - db
+    networks:
+      - migarden_network
+
+  evolution_api:
+    image: atendai/evolution-api:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - evolution_data:/evolution/instances
+    environment:
+      # Basic config for Evolution API
+      AUTHENTICATION_API_KEY: ${EVOLUTION_API_KEY:-changeme}
+    networks:
+      - migarden_network
+
+networks:
+  migarden_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  evolution_data:
