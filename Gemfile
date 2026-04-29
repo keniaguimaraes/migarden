@@ -71,3 +71,7 @@ group :test do
 end
 
 gem "rspec-rails", "~> 7.1", groups: [:development, :test]
+
+gem "faraday", "~> 2.14"
+
+gem "webmock", "~> 3.26"
