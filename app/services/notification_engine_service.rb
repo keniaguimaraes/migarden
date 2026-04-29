@@ -6,8 +6,9 @@ class NotificationEngineService
   }.freeze
 
   def self.call
-    due_parameters = CareParameter.all.select do |parameter|
-      CareCalculatorService.due_today(parameter)
+    due_parameters = []
+    CareParameter.includes(:plant).find_each do |parameter|
+      due_parameters << parameter if CareCalculatorService.due_today(parameter)
     end
 
     return if due_parameters.empty?
