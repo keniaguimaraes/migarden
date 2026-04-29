@@ -10,6 +10,7 @@ O miGarden é um sistema projetado para ajudar usuários a manterem suas plantas
     - `name`: Nome da planta.
     - `species`: Espécie botânica.
     - `nickname`: Nome carinhoso dado pelo usuário.
+    - `image`: Anexo via Active Storage (Cloudinary/S3).
 - **CareParameter (Parâmetro de Cuidado)**: Define a frequência de cada ação.
     - `plant_id`: Referência à planta.
     - `action_type`: Enum (`:watering`, `:fertilization`, `:insecticide`).
@@ -22,12 +23,15 @@ O miGarden é um sistema projetado para ajudar usuários a manterem suas plantas
 
 ## 3. Lógica de Notificação e Automação
 
-### Cálculo de Necessidade (`CareCalculatorService`)
+### Cálculo de Necessidade e Ajuste de Frequência (`CareCalculatorService`)
 O sistema identifica se uma planta precisa de cuidado hoje seguindo a regra:
 - Busca o último `CareLog` para o `CareParameter` específico.
 - Se não houver log, a planta é considerada "pendente".
 - Se houver log, calcula: `performed_at + interval_days`.
 - Se a data resultante for $\le$ hoje, a ação está vencida ou é para hoje.
+
+**Ajuste Dinâmico:** 
+Se um `CareLog` for registrado significativamente antes do prazo previsto, o sistema poderá sugerir ou aplicar automaticamente a atualização do `interval_days` no `CareParameter` para refletir a nova necessidade da planta.
 
 ### Engine de Notificação (`NotificationEngineService`)
 1. Identifica todas as plantas e ações pendentes para a data atual.
@@ -36,7 +40,8 @@ O sistema identifica se uma planta precisa de cuidado hoje seguindo a regra:
 
 ### Integração WhatsApp (`WhatsApp::SendNotificationService`)
 - **Gateway**: Evolution API.
-- **Método**: Requisição POST para o endpoint de envio de texto.
+- **Método**: Requisição POST para endpoints de texto e mídia.
+- **Recurso Visual**: Envio da foto da planta junto com a notificação diária para facilitar a identificação.
 - **Configuração**: Chaves de API e nomes de instâncias via variáveis de ambiente.
 
 ## 4. Infraestrutura e Deployment
@@ -45,6 +50,7 @@ O sistema identifica se uma planta precisa de cuidado hoje seguindo a regra:
 - **Backend**: Ruby on Rails 7+ (API Mode).
 - **Banco de Dados**: PostgreSQL.
 - **Filas/Jobs**: Solid Queue (Padrão Rails 8).
+- **Armazenamento de Mídia**: Active Storage com Cloudinary ou AWS S3.
 - **Container**: Docker (Dockerfile multi-stage + docker-compose).
 - **Hospedagem**: Railway.
 
