@@ -34,10 +34,18 @@ RUN if [ "$RAILS_ENV" = "production" ]; then bundle exec rails assets:precompile
 # Stage 3: Final
 FROM base AS final
 
+# Create a non-root user
+RUN groupadd -r rails && useradd -r -g rails rails
+
 # Copy bundled gems from build stage
 COPY --from=build /usr/local/bundle /usr/local/bundle
 # Copy application code from build stage
 COPY --from=build /app /app
+
+# Set ownership to the non-root user
+RUN chown -R rails:rails /app /usr/local/bundle
+
+USER rails
 
 EXPOSE 3000
 
