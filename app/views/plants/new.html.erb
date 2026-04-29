@@ -1,0 +1,29 @@
+<div class="glass rounded-3xl p-8 max-w-md mx-auto mt-12 text-white">
+  <h2 class="font-display text-3xl mb-6 text-center">Nova Planta</h2>
+
+  <%= form_with(model: @plant, local: true, class: "space-y-6") do |f| %>
+    <div>
+      <%= f.label :name, "Nome da Planta", class: "block text-xs uppercase tracking-widest text-gray-400 mb-2" %>
+      <%= f.text_field :name, class: "w-full bg-white/10 border border-white/10 rounded-xl p-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-[#C5FF42] outline-none" %>
+    </div>
+
+    <div>
+      <%= f.label :species, "Espécie", class: "block text-xs uppercase tracking-widest text-gray-400 mb-2" %>
+      <%= f.text_field :species, class: "w-full bg-white/10 border border-white/10 rounded-xl p-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-[#C5FF42] outline-none" %>
+    </div>
+
+    <div>
+      <%= f.label :nickname, "Apelido", class: "block text-xs uppercase tracking-widest text-gray-400 mb-2" %>
+      <%= f.text_field :nickname, class: "w-full bg-white/10 border border-white/10 rounded-xl p-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-[#C5FF42] outline-none" %>
+    </div>
+
+    <div>
+      <%= f.label :image, "Foto da Planta", class: "block text-xs uppercase tracking-widest text-gray-400 mb-2" %>
+      <%= f.file_field :image, class: "w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-white/10 file:text-white hover:file:bg-white/20" %>
+    </div>
+
+    <button type="submit" class="w-full bg-[#C5FF42] text-[#0B241A] py-4 rounded-2xl font-bold hover:bg-white transition-all shadow-lg">
+      Adicionar ao Jardim 🌿
+    </button>
+  <% end %>
+</div>

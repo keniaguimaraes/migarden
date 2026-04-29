@@ -1,16 +1,61 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Migarden</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<html lang="pt-br">
+<head>
+  <title>miGarden - Seu Jardim Inteligente</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
-  </head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <body>
+  <style>
+    :root {
+      --deep-forest: #0B241A;
+      --neon-sprout: #C5FF42;
+      --terracotta: #B65D3B;
+      --moss-green: #4A6D5B;
+      --mist: #E8F1F2;
+    }
+    body {
+      background-color: var(--deep-forest);
+      color: var(--mist);
+      font-family: 'Outfit', sans-serif;
+    }
+    .font-display { font-family: 'Playfair Display', serif; }
+    .glass {
+      background: rgba(74, 109, 91, 0.2);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(232, 241, 242, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+    .neon-glow {
+      box-shadow: 0 0 15px var(--neon-sprout);
+    }
+    .plant-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .plant-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      background: rgba(74, 109, 91, 0.3);
+    }
+  </style>
+
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+<body class="min-h-screen p-8">
+  <nav class="flex justify-between items-center mb-12 max-w-6xl mx-auto">
+    <a href="/plants" class="font-display text-4xl text-white">miGarden</a>
+    <div class="flex gap-4">
+      <a href="/plants/new" class="bg-[#C5FF42] text-[#0B241A] px-4 py-2 rounded-full font-semibold hover:bg-white transition-colors">
+        + Nova Planta
+      </a>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto">
     <%= yield %>
-  </body>
+  </main>
+</body>
 </html>
