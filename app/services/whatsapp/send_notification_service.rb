@@ -1,5 +1,9 @@
 module WhatsApp
   class SendNotificationService
+    API_URL = ENV['EVOLUTION_API_URL']
+    INSTANCE = ENV['EVOLUTION_INSTANCE']
+    API_KEY = ENV['EVOLUTION_API_KEY']
+
     def self.call(number, text, image_url = nil)
       new(number, text, image_url).call
     end
@@ -16,20 +20,25 @@ module WhatsApp
       end
 
       response.success?
+    rescue Faraday::Error => e
+      Rails.logger.error("[WhatsApp::SendNotificationService] Request failed: #{e.message}")
+      Rails.logger.error("[WhatsApp::SendNotificationService] Response body: #{e.response[:body]}") if e.response
+      false
     end
 
     private
 
     def connection
       @connection ||= Faraday.new do |f|
-        f.headers['apikey'] = ENV['EVOLUTION_API_KEY']
+        f.headers['apikey'] = API_KEY
         f.headers['Content-Type'] = 'application/json'
+        f.request :timeout, timeout: 5, open_timeout: 2
         f.adapter Faraday.default_adapter
       end
     end
 
     def endpoint
-      "#{ENV['EVOLUTION_API_URL']}/message/sendText/#{ENV['EVOLUTION_INSTANCE']}"
+      "#{API_URL}/message/sendText/#{INSTANCE}"
     end
 
     def payload

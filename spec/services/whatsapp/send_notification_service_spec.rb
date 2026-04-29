@@ -67,5 +67,23 @@ RSpec.describe WhatsApp::SendNotificationService do
         expect(result).to be false
       end
     end
+
+    context 'when a connection error occurs' do
+      it 'handles Faraday::ConnectionFailed and returns false' do
+        stub_request(:post, endpoint).to_raise(Faraday::ConnectionFailed.new('Connection failed'))
+
+        result = described_class.call(number, text)
+
+        expect(result).to be false
+      end
+
+      it 'handles Faraday::TimeoutError and returns false' do
+        stub_request(:post, endpoint).to_raise(Faraday::TimeoutError.new('Request timed out'))
+
+        result = described_class.call(number, text)
+
+        expect(result).to be false
+      end
+    end
   end
 end
