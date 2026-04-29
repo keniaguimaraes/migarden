@@ -1,4 +1,6 @@
 # syntax=docker/dockerfile:1
+
+# Stage 1: Base
 FROM ruby:3.3.0-slim AS base
 
 # Install system dependencies
@@ -14,15 +16,28 @@ ENV RAILS_ENV=production \
     BUNDLE_PATH=/usr/local/bundle \
     BUNDLE_WITHOUT=development:test
 
+# Stage 2: Build
+FROM base AS build
+
 # Install gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install
+RUN bundle install && \
+    rm -rf /usr/local/bundle/cache/*.gem && \
+    find /usr/local/bundle/gems/ -name "*.gem" -delete
 
 # Copy application code
 COPY . .
 
-# Precompile assets (if applicable)
-# RUN if [ "$RAILS_ENV" = "production" ]; then bundle exec rails assets:precompile; fi
+# Precompile assets
+RUN if [ "$RAILS_ENV" = "production" ]; then bundle exec rails assets:precompile; fi
+
+# Stage 3: Final
+FROM base AS final
+
+# Copy bundled gems from build stage
+COPY --from=build /usr/local/bundle /usr/local/bundle
+# Copy application code from build stage
+COPY --from=build /app /app
 
 EXPOSE 3000
 
