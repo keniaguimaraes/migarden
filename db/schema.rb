@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_04_29_212306) do
+ActiveRecord::Schema[7.0].define(version: 2026_04_29_212628) do
   create_table "care_logs", force: :cascade do |t|
     t.integer "plant_id", null: false
     t.integer "care_parameter_id", null: false
-    t.date "performed_at"
+    t.date "performed_at", null: false
     t.text "observation"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -24,15 +24,15 @@ ActiveRecord::Schema[7.0].define(version: 2026_04_29_212306) do
 
   create_table "care_parameters", force: :cascade do |t|
     t.integer "plant_id", null: false
-    t.integer "action_type"
-    t.integer "interval_days"
+    t.integer "action_type", null: false
+    t.integer "interval_days", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["plant_id"], name: "index_care_parameters_on_plant_id"
   end
 
   create_table "plants", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "species"
     t.string "nickname"
     t.datetime "created_at", null: false
