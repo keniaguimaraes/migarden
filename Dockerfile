@@ -1,7 +1,5 @@
-# syntax=docker/dockerfile:1
-
-# Stage 1: Base
-FROM ruby:3.3.0-slim AS base
+# Dockerfile for Local Development
+FROM ruby:3.3.0-slim
 
 # Install system dependencies
 RUN apt-get update -qq && \
@@ -10,42 +8,15 @@ RUN apt-get update -qq && \
 
 WORKDIR /app
 
-# Set environment variables
-ENV RAILS_ENV=production \
-    BUNDLE_DEPLOYMENT=1 \
-    BUNDLE_PATH=/usr/local/bundle \
-    BUNDLE_WITHOUT=development:test
+# Development environment settings
+ENV RAILS_ENV=development
 
-# Stage 2: Build
-FROM base AS build
-
-# Install gems
+# Install gems (not using deployment mode for easier local updates)
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf /usr/local/bundle/cache/*.gem && \
-    find /usr/local/bundle/gems/ -name "*.gem" -delete
+RUN bundle install
 
 # Copy application code
 COPY . .
-
-# Precompile assets
-RUN if [ "$RAILS_ENV" = "production" ]; then bundle exec rails assets:precompile; fi
-
-# Stage 3: Final
-FROM base AS final
-
-# Create a non-root user
-RUN groupadd -r rails && useradd -r -g rails rails
-
-# Copy bundled gems from build stage
-COPY --from=build /usr/local/bundle /usr/local/bundle
-# Copy application code from build stage
-COPY --from=build /app /app
-
-# Set ownership to the non-root user
-RUN chown -R rails:rails /app /usr/local/bundle
-
-USER rails
 
 EXPOSE 3000
 
