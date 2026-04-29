@@ -9,7 +9,11 @@ class CareCalculatorService
   end
 
   def self.adjust_frequency(parameter, actual_date)
-    last_log = CareLog.where(care_parameter: parameter).order(performed_at: :desc).first
+    # Find the last log BEFORE the current one being created
+    last_log = CareLog.where(care_parameter: parameter)
+                     .where('performed_at < ?', actual_date)
+                     .order(performed_at: :desc)
+                     .first
     return if last_log.nil?
 
     expected_date = last_log.performed_at.to_date + parameter.interval_days.days
