@@ -32,7 +32,7 @@ module Whatsapp
       @connection ||= Faraday.new do |f|
         f.headers['apikey'] = API_KEY
         f.headers['Content-Type'] = 'application/json'
-        f.request :timeout, timeout: 5, open_timeout: 2
+        f.options.timeout = 10 # Aumentando timeout total
         f.adapter Faraday.default_adapter
       end
     end
