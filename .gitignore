@@ -48,3 +48,4 @@ node_modules
 
 # Ignore local test guide
 /local_test_guide.md
+DEPLOY_RAILWAY.md
