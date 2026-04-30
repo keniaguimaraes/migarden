@@ -1,2 +1,2 @@
-web: bundle exec rails server -b 0.0.0.0
-worker: bundle exec rake solid_queue:start
+web: bundle exec rails db:migrate && bundle exec rails server -b 0.0.0.0 -p $PORT
+worker: bundle exec sidekiq

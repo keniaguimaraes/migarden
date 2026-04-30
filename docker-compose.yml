@@ -21,8 +21,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.prod
-    entrypoint: /app/docker-entrypoint.sh
-    command: bundle exec rails s -b 0.0.0.0 -p 3000
+    command: sh -c "bundle exec rails db:migrate && bundle exec rails s -b 0.0.0.0 -p 3000"
     ports:
       - "3000:3000"
     environment:
@@ -45,7 +44,6 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.prod
-    entrypoint: /app/docker-entrypoint.sh
     command: bundle exec sidekiq -e production
     environment:
       RAILS_ENV: production
