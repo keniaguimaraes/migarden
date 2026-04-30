@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :plants
+  resources :plants do
+    resources :care_parameters, only: [:new, :create, :destroy]
+  end
   resources :care_logs, only: [:create]
 
   root "plants#index"
