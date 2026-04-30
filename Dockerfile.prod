@@ -48,6 +48,9 @@ COPY --from=build /app /app
 # Make entrypoint executable
 RUN chmod +x /app/docker-entrypoint.sh
 
+# Run migrations at build time (not runtime)
+RUN bundle exec rails db:create db:migrate || true
+
 # Set ownership to the non-root user
 RUN chown -R rails:rails /app /usr/local/bundle /home/rails
 

@@ -1,7 +1,12 @@
 #!/bin/bash
 set -e
 
+# Force output to stdout
+exec > >(tee /proc/1/fd/1) 2>&1
+
+echo "=========================================="
 echo "=== Docker Entrypoint Starting ==="
+echo "=========================================="
 
 # Remove possibly stale server.pid files
 rm -f /app/tmp/pids/server.pid
@@ -12,8 +17,7 @@ sleep 10
 
 # Run database setup
 echo "Running database migrations..."
-bundle exec rails db:prepare 2>&1 || echo "Migration failed, trying db:migrate..."
-bundle exec rails db:migrate 2>&1 || echo "Migration check complete"
+bundle exec rails db:prepare
 
 echo "Database setup done!"
 
@@ -23,8 +27,11 @@ mkdir -p /app/tmp/pids
 
 # List migrations to verify
 echo "=== Current migrations status ==="
-bundle exec rails db:migrate:status 2>&1 || true
+bundle exec rails db:migrate:status || true
 
-# Execute the CMD from Dockerfile (which will be 'rails s' or 'sidekiq')
-echo "Starting application..."
-exec "$@"
+# Execute the command passed or default to rails server
+echo "=========================================="
+echo "=== Starting application ==="
+echo "=========================================="
+
+exec "${@:-bundle exec rails server -b 0.0.0.0}"
