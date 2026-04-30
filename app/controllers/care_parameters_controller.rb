@@ -14,6 +14,12 @@ class CareParametersController < ApplicationController
     @care_parameter = @plant.care_parameters.build(care_parameter_params)
 
     if @care_parameter.save
+      CareLog.create(
+        plant: @plant,
+        care_parameter: @care_parameter,
+        performed_at: Time.current,
+        observation: "Parâmetro de cuidado cadastrado: #{@care_parameter.action_type.humanize} a cada #{@care_parameter.interval_days} dias"
+      )
       redirect_to plant_path(@plant), notice: "Parâmetro de cuidado adicionado com sucesso!"
     else
       redirect_to plant_path(@plant), alert: "Erro ao adicionar parâmetro."

@@ -55,19 +55,8 @@
         <% end %>
       </div>
 
-      <div class="mt-8 glass rounded-2xl p-6 border border-white/5">
-        <h4 class="font-display text-xl mb-4">Adicionar Parâmetro de Cuidado</h4>
-        <%= form_with(url: plant_care_parameters_path(@plant), local: true, class: "space-y-4") do |f| %>
-          <div>
-            <%= f.label :action_type, "Tipo de Cuidado", class: "block text-xs uppercase tracking-widest text-gray-400 mb-2" %>
-            <%= f.select :action_type, options_for_select([["💧 Rega", "watering"], ["🧪 Fertilização", "fertilization"], ["🐛 Inseticida", "insecticide"]]), {}, class: "w-full bg-white/10 border border-white/10 rounded-xl p-3 text-white focus:ring-2 focus:ring-[#C5FF42] outline-none" %>
-          </div>
-          <div>
-            <%= f.label :interval_days, "Intervalo (dias)", class: "block text-xs uppercase tracking-widest text-gray-400 mb-2" %>
-            <%= f.number_field :interval_days, min: 1, value: 7, class: "w-full bg-white/10 border border-white/10 rounded-xl p-3 text-white placeholder-gray-500 focus:ring-2 focus:ring-[#C5FF42] outline-none" %>
-          </div>
-          <%= f.submit "Adicionar", class: "w-full bg-[#C5FF42] text-[#0B241A] py-3 rounded-xl font-bold hover:bg-white transition-all" %>
-        <% end %>
+      <div class="mt-8">
+        <%= link_to "Adicionar Parâmetro de Cuidado", new_plant_care_parameter_path(@plant), class: "bg-[#C5FF42] text-[#0B241A] px-4 py-2 rounded-full font-semibold hover:bg-white transition-colors" %>
       </div>
 
       <div class="mt-12">
