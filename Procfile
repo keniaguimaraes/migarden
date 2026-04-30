@@ -1,2 +1,3 @@
-web: bundle exec rails db:migrate && bundle exec rails server -b 0.0.0.0 -p $PORT
+release: bundle exec rails db:migrate
+web: bundle exec rails server -b 0.0.0.0 -p $PORT
 worker: bundle exec sidekiq
