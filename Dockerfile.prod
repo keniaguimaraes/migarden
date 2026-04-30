@@ -22,8 +22,7 @@ FROM base AS build
 # Install gems
 COPY Gemfile Gemfile.lock ./
 RUN bundle install && \
-    rm -rf /usr/local/bundle/cache/*.gem && \
-    find /usr/local/bundle/gems/ -name "*.gem" -delete
+    rm -rf /usr/local/bundle/cache/*.gem
 
 # Copy application code
 COPY . .
