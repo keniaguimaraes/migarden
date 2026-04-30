@@ -51,9 +51,6 @@ RUN chmod +x /app/docker-entrypoint.sh
 # Copy start.sh and make it executable before changing user
 COPY --from=build /app/start.sh /start.sh
 
-# Run migrations
-RUN bundle exec rails db:migrate
-
 # Set ownership to the non-root user
 RUN chown -R rails:rails /app /usr/local/bundle /home/rails /start.sh
 
