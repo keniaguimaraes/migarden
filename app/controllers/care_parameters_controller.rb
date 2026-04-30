@@ -1,4 +1,9 @@
 class CareParametersController < ApplicationController
+  def index
+    @plant = Plant.find(params[:plant_id])
+    @care_parameters = @plant.care_parameters
+  end
+
   def new
     @plant = Plant.find(params[:plant_id])
     @care_parameter = CareParameter.new
