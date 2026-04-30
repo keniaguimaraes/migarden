@@ -14,7 +14,8 @@ WORKDIR /app
 ENV RAILS_ENV=production \
     BUNDLE_DEPLOYMENT=1 \
     BUNDLE_PATH=/usr/local/bundle \
-    BUNDLE_WITHOUT=development:test
+    BUNDLE_WITHOUT=development:test \
+    SECRET_KEY_BASE=dummy_secret_key_base_for_build_only
 
 # Stage 2: Build
 FROM base AS build

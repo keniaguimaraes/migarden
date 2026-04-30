@@ -27,6 +27,7 @@ services:
       - "3000:3000"
     environment:
       RAILS_ENV: production
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@db:5432/migarden_production
       EVOLUTION_API_URL: http://evolution_api:8080
@@ -48,6 +49,7 @@ services:
     command: bundle exec sidekiq -e production
     environment:
       RAILS_ENV: production
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@db:5432/migarden_production
       EVOLUTION_API_URL: http://evolution_api:8080
