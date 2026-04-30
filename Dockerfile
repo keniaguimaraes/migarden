@@ -3,7 +3,7 @@ FROM ruby:3.3.0-slim
 
 # Install system dependencies
 RUN apt-get update -qq && \
-    apt-get install -y build-essential libpq-dev nodejs git curl cron dcron && \
+    apt-get install -y build-essential libpq-dev nodejs git curl cron && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
