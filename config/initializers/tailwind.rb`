@@ -1,0 +1,5 @@
+module Tailwind
+  class Engine < Rails::Engine
+    # Configuration for Tailwind CSS
+  end
+end

@@ -17,6 +17,10 @@
 !/log/.keep
 !/tmp/.keep
 
+.git
+
+node_modules
+
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
 !/tmp/pids/
@@ -33,3 +37,14 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Keep Gemfile.lock for consistent builds across platforms
+/Gemfile.lock
+
+# Ignore environment files
+.env
+.env.local
+.env.*.local
+
+# Ignore local test guide
+/local_test_guide.md
