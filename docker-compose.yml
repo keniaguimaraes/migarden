@@ -45,7 +45,7 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     entrypoint: /app/docker-entrypoint.sh
-    command: bundle exec sidekiq -C config/sidekiq.yml -e production
+    command: bundle exec sidekiq -e production
     environment:
       RAILS_ENV: production
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
