@@ -39,7 +39,7 @@ node_modules
 /config/master.key
 
 # Keep Gemfile.lock for consistent builds across platforms
-/Gemfile.lock
+# /Gemfile.lock
 
 # Ignore environment files
 .env
