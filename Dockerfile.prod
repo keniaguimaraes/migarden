@@ -48,16 +48,16 @@ COPY --from=build /app /app
 # Make entrypoint executable
 RUN chmod +x /app/docker-entrypoint.sh
 
+# Copy start.sh and make it executable before changing user
+COPY --from=build /app/start.sh /start.sh
+
 # Set ownership to the non-root user
-RUN chown -R rails:rails /app /usr/local/bundle /home/rails
+RUN chown -R rails:rails /app /usr/local/bundle /home/rails /start.sh
 
 USER rails
 
 ENV HOME=/home/rails
 
 EXPOSE 3000
-
-COPY --from=build /app/start.sh /start.sh
-RUN chmod +x /start.sh
 
 ENTRYPOINT ["/start.sh"]
