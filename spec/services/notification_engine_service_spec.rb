@@ -14,7 +14,7 @@ RSpec.describe NotificationEngineService, type: :service do
   describe '.call' do
     context 'when no tasks are due' do
       it 'does not send any notification' do
-        expect(WhatsApp::SendNotificationService).not_to receive(:call)
+        expect(Whatsapp::SendNotificationService).not_to receive(:call)
         NotificationEngineService.call
       end
     end
@@ -32,7 +32,7 @@ RSpec.describe NotificationEngineService, type: :service do
       end
 
       it 'sends a consolidated message in Portuguese' do
-        expect(WhatsApp::SendNotificationService).to receive(:call).with(
+        expect(Whatsapp::SendNotificationService).to receive(:call).with(
           user_phone,
           a_string_matching(/Olá! Hoje é dia de cuidar do seu jardim/)
         )
@@ -45,7 +45,7 @@ RSpec.describe NotificationEngineService, type: :service do
         # Action types are :watering, :fertilization, :insecticide
         # Human labels: Rega, Fertilização, Inseticida
 
-        expect(WhatsApp::SendNotificationService).to receive(:call).with(
+        expect(Whatsapp::SendNotificationService).to receive(:call).with(
           user_phone,
           a_string_matching(/Rega: Samambaia, Jiboia.*Fertilização: Orquídea|Fertilização: Orquídea.*Rega: Samambaia, Jiboia/m)
         )
@@ -62,7 +62,7 @@ RSpec.describe NotificationEngineService, type: :service do
       end
 
       it 'sends a notification for that single plant' do
-        expect(WhatsApp::SendNotificationService).to receive(:call).with(
+        expect(Whatsapp::SendNotificationService).to receive(:call).with(
           user_phone,
           include('Rega: Samambaia')
         )

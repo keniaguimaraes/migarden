@@ -19,7 +19,7 @@ class NotificationEngineService
 
     message = build_message(grouped_tasks)
 
-    WhatsApp::SendNotificationService.call(
+    Whatsapp::SendNotificationService.call(
       ENV['USER_PHONE'],
       message
     )

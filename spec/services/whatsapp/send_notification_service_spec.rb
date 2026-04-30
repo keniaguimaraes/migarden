@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'webmock/rspec'
 
-RSpec.describe WhatsApp::SendNotificationService do
+RSpec.describe Whatsapp::SendNotificationService do
   let(:number) { '5511999999999' }
   let(:text) { 'Hello from miGarden!' }
   let(:image_url) { 'https://example.com/image.jpg' }

@@ -1,4 +1,4 @@
-module WhatsApp
+module Whatsapp
   class SendNotificationService
     API_URL = ENV['EVOLUTION_API_URL']
     INSTANCE = ENV['EVOLUTION_INSTANCE']
@@ -21,8 +21,8 @@ module WhatsApp
 
       response.success?
     rescue Faraday::Error => e
-      Rails.logger.error("[WhatsApp::SendNotificationService] Request failed: #{e.message}")
-      Rails.logger.error("[WhatsApp::SendNotificationService] Response body: #{e.response[:body]}") if e.response
+      Rails.logger.error("[Whatsapp::SendNotificationService] Request failed: #{e.message}")
+      Rails.logger.error("[Whatsapp::SendNotificationService] Response body: #{e.response[:body]}") if e.response
       false
     end
 
