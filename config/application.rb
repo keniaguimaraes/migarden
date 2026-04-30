@@ -11,7 +11,7 @@ module Migarden
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
-    # Disable encrypted credentials
+    # Don't use encrypted credentials (use env vars instead)
     config.credentials.enabled = false
 
     # Configuration for the application, engines, and railties goes here.
