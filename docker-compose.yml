@@ -12,12 +12,18 @@ services:
 
   app:
     build: .
+    entrypoint: /app/docker-entrypoint.sh
+    command: bundle exec rails server -b 0.0.0.0
     ports:
       - "3000:3000"
     environment:
       RAILS_ENV: production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@db:5432/migarden_production
       EVOLUTION_API_URL: http://evolution_api:8080
+      EVOLUTION_INSTANCE: ${EVOLUTION_INSTANCE}
+      EVOLUTION_API_KEY: ${EVOLUTION_API_KEY}
+      USER_PHONE: ${USER_PHONE}
     depends_on:
       - db
     networks:
