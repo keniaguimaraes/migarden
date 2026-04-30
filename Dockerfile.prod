@@ -35,7 +35,10 @@ RUN if [ "$RAILS_ENV" = "production" ]; then bundle exec rails assets:precompile
 FROM base AS final
 
 # Create a non-root user for security
-RUN groupadd -r rails && useradd -r -g rails rails
+RUN groupadd -r rails && \
+    useradd -r -g rails rails && \
+    mkdir -p /home/rails && \
+    chown -R rails:rails /home/rails
 
 # Copy bundled gems from build stage
 COPY --from=build /usr/local/bundle /usr/local/bundle
@@ -43,9 +46,11 @@ COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /app /app
 
 # Set ownership to the non-root user
-RUN chown -R rails:rails /app /usr/local/bundle
+RUN chown -R rails:rails /app /usr/local/bundle /home/rails
 
 USER rails
+
+ENV HOME=/home/rails
 
 EXPOSE 3000
 
