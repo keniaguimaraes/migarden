@@ -10,10 +10,19 @@ services:
     networks:
       - migarden_network
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - migarden_network
+
   app:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.prod
     entrypoint: /app/docker-entrypoint.sh
-    command: bundle exec rails server -b 0.0.0.0
+    command: bundle exec rails s -b 0.0.0.0 -p 3000
     ports:
       - "3000:3000"
     environment:
@@ -24,8 +33,31 @@ services:
       EVOLUTION_INSTANCE: ${EVOLUTION_INSTANCE}
       EVOLUTION_API_KEY: ${EVOLUTION_API_KEY}
       USER_PHONE: ${USER_PHONE}
+      REDIS_URL: redis://redis:6379/0
     depends_on:
       - db
+      - redis
+    networks:
+      - migarden_network
+
+  worker:
+    build: 
+      context: .
+      dockerfile: Dockerfile.prod
+    entrypoint: /app/docker-entrypoint.sh
+    command: bundle exec sidekiq -C config/sidekiq.yml -e production
+    environment:
+      RAILS_ENV: production
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@db:5432/migarden_production
+      EVOLUTION_API_URL: http://evolution_api:8080
+      EVOLUTION_INSTANCE: ${EVOLUTION_INSTANCE}
+      EVOLUTION_API_KEY: ${EVOLUTION_API_KEY}
+      USER_PHONE: ${USER_PHONE}
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
     networks:
       - migarden_network
 
@@ -38,6 +70,7 @@ services:
     environment:
       # Basic config for Evolution API
       AUTHENTICATION_API_KEY: ${EVOLUTION_API_KEY:-changeme}
+      # Certifique-se de que o Redis está acessível se o Evolution API depender dele
     networks:
       - migarden_network
 
