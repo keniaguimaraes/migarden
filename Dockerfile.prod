@@ -57,9 +57,3 @@ USER rails
 ENV HOME=/home/rails
 
 EXPOSE 3000
-
-# Set entrypoint to run migrations and start the app
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
-
-# Default command (can be overridden by Procfile)
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
