@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-# Force output to stdout
-exec > >(tee /proc/1/fd/1) 2>&1
+# Force output to stdout/stderr
+exec 2>&1
 
 echo "=========================================="
 echo "=== Docker Entrypoint Starting ==="
@@ -42,7 +42,12 @@ echo ""
 # Run migrations with verbose output
 echo "[5/6] Running migrations (verbose)..."
 bundle exec rails db:migrate --verbose 2>&1 | tee /tmp/migration.log
-echo "✓ Migrations completed"
+MIGRATION_EXIT=$?
+if [ $MIGRATION_EXIT -eq 0 ]; then
+  echo "✓ Migrations completed successfully"
+else
+  echo "⚠ Migrations completed with exit code: $MIGRATION_EXIT"
+fi
 echo ""
 
 # Check migration status
@@ -59,6 +64,8 @@ echo "=== Application Ready ==="
 echo "Startup completed at: $(date)"
 echo "=========================================="
 echo ""
+echo "Starting command: $@"
+echo ""
 
 # Execute the command passed or default to rails server
-exec "${@:-bundle exec rails server -b 0.0.0.0}"
+exec "$@"
