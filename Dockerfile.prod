@@ -15,41 +15,19 @@ ENV RAILS_ENV=production \
     BUNDLE_WITHOUT=development:test \
     SECRET_KEY_BASE=dummy_for_build_only
 
-# Stage 2: Build
-FROM base AS build
 
-# Install gems
+
+# Copia o Gemfile e Gemfile.lock para o contêiner
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf /usr/local/bundle/cache/*.gem
 
-# Copy application code
+# Instala as gems
+RUN bundle install --without development test
+
+# Copia o restante do código da aplicação
 COPY . .
 
-# Precompile assets
-RUN if [ "$RAILS_ENV" = "production" ]; then bundle exec rails assets:precompile; fi
-
-# Stage 3: Final
-FROM base AS final
-
-# Create a non-root user for security
-RUN groupadd -r rails && \
-    useradd -r -g rails rails && \
-    mkdir -p /home/rails && \
-    chown -R rails:rails /home/rails
-
-# Copy bundled gems from build stage
-COPY --from=build /usr/local/bundle /usr/local/bundle
-# Copy application code from build stage
-COPY --from=build /app /app
-
-# Set ownership to the non-root user
-RUN chown -R rails:rails /app /usr/local/bundle /home/rails
-
-USER rails
-
-ENV HOME=/home/rails
-
+# Expõe a porta que o Rails usa
 EXPOSE 3000
 
+# Comando para executar as migrações (apenas se necessárias) e o seed antes de iniciar o servidor
 CMD ["sh", "-c", "rails db:migrate:status | grep 'down' > /dev/null && rails db:migrate || echo 'Migrações já aplicadas'; rails db:seed && rails server -b 0.0.0.0"]
