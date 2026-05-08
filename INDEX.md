@@ -10,6 +10,10 @@
 → Leia: **[FIX_SOLID_QUEUE_ERROR.md](FIX_SOLID_QUEUE_ERROR.md)**  
 *Solução rápida para o erro de worker*
 
+### 🔍 Migrations não estão criando tabelas?
+→ Leia: **[DEBUG_MIGRATIONS.md](DEBUG_MIGRATIONS.md)**  
+*Como debugar e corrigir problemas de migration*
+
 ### ⚡ Tenho 5 minutos? 
 → Leia: **[RAILWAY_QUICK_START.md](RAILWAY_QUICK_START.md)**  
 *Resumo dos passos essenciais em ordem*
@@ -38,9 +42,10 @@
 
 ## 📚 Documentação Completa
 
-### Guides de Deployment
+### Guides de Deployment & Troubleshooting
 | Documento | Propósito | Tempo |
 |-----------|----------|-------|
+| [DEBUG_MIGRATIONS.md](DEBUG_MIGRATIONS.md) | Debugar migrations no Railway | 10 min |
 | [FIX_SOLID_QUEUE_ERROR.md](FIX_SOLID_QUEUE_ERROR.md) | Corrigir erro solid_queue | 5 min |
 | [RAILWAY_QUICK_START.md](RAILWAY_QUICK_START.md) | Passos rápidos | 5 min |
 | [RAILWAY_DEPLOYMENT_GUIDE.md](RAILWAY_DEPLOYMENT_GUIDE.md) | Guia completo | 20 min |
