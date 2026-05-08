@@ -28,6 +28,3 @@ COPY . .
 
 # Expõe a porta que o Rails usa
 EXPOSE 3000
-
-# Comando para executar as migrações (apenas se necessárias) e o seed antes de iniciar o servidor
-CMD ["sh", "-c", "rails db:migrate:status | grep 'down' > /dev/null && rails db:migrate || echo 'Migrações já aplicadas'; rails db:seed && rails server -b 0.0.0.0"]
