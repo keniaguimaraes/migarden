@@ -24,10 +24,12 @@ worker: bundle exec sidekiq
 
 ✅ **config/database.yml** - Deve aceitar `DATABASE_URL`
 
-✅ **Gemfile** - Deve ter postgres gem:
+✅ **Gemfile** - Deve ter **PostgreSQL para produção**:
 ```ruby
-gem "pg", "~> 1.5"  # Para produção
+gem "pg", "~> 1.5"  # Para produção ✅
+# NÃO ter: gem "sqlite3" para produção ❌
 ```
+⚠️ **IMPORTANTE**: Remova `gem "sqlite3"` do Gemfile se estiver lá!
 
 ### 3️⃣ Commit e Push no GitHub
 

@@ -16,6 +16,7 @@
   ```
 - [ ] `Dockerfile.prod` existe e faz multi-stage build
 - [ ] `Gemfile` tem `gem "pg"` para PostgreSQL
+- [ ] `Gemfile` **NÃO** tem `gem "sqlite3"` (remover se tiver!) ⚠️
 - [ ] `.env` não commitado (existe `.env.sample`)
 - [ ] `config/database.yml` aceita `DATABASE_URL`
 

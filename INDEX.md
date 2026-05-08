@@ -6,6 +6,10 @@
 
 ## 🎯 COMECE AQUI - Escolha seu caminho
 
+### 🐛 Estou recebendo erro "solid_queue:start"?
+→ Leia: **[FIX_SOLID_QUEUE_ERROR.md](FIX_SOLID_QUEUE_ERROR.md)**  
+*Solução rápida para o erro de worker*
+
 ### ⚡ Tenho 5 minutos? 
 → Leia: **[RAILWAY_QUICK_START.md](RAILWAY_QUICK_START.md)**  
 *Resumo dos passos essenciais em ordem*
@@ -37,6 +41,7 @@
 ### Guides de Deployment
 | Documento | Propósito | Tempo |
 |-----------|----------|-------|
+| [FIX_SOLID_QUEUE_ERROR.md](FIX_SOLID_QUEUE_ERROR.md) | Corrigir erro solid_queue | 5 min |
 | [RAILWAY_QUICK_START.md](RAILWAY_QUICK_START.md) | Passos rápidos | 5 min |
 | [RAILWAY_DEPLOYMENT_GUIDE.md](RAILWAY_DEPLOYMENT_GUIDE.md) | Guia completo | 20 min |
 | [RAILWAY_DASHBOARD_VISUAL_GUIDE.md](RAILWAY_DASHBOARD_VISUAL_GUIDE.md) | Interface do Railway | 15 min |
@@ -63,6 +68,13 @@
 ## 🗺️ Fluxo de Deployment (Visão Geral)
 
 ```
+┌─────────────────────────────────────────────────────────┐
+│ 0. VERIFICAÇÃO INICIAL (IMPORTANTE!)                    │
+│   └─ Remover gem "sqlite3" do Gemfile                   │
+│   └─ Manter gem "pg" para produção                      │
+│   └─ Se tiver erro solid_queue, ver FIX_SOLID_... md   │
+└─────────────────────────────────────────────────────────┘
+                          ↓
 ┌─────────────────────────────────────────────────────────┐
 │ 1. PREPARAÇÃO LOCAL (você, seu computador)             │
 │   └─ Gerar secrets (rails secret)                      │
