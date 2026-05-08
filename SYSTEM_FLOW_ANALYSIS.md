@@ -65,7 +65,7 @@ O sistema de notificação é um processo assíncrono impulsionado principalment
     *   **Saída:** Identifica tarefas que estão vencidas ou prestes a vencer.
 2.  **`NotificationEngineService`:**
     *   **Função:** Agrega os achados do calculador.
-    *   **Ação:** Agrupa as tarefas pendentes por usuário/combinação de planta. Determina o conteúdo final da mensagem, talvez agrupando múltiplas ações atrasadas para um único usuário em uma única notificação.
+    *   **Ação:** Agrupa as tarefas pendentes por usuário/combinação de planta. Determina o conteúdo final da mensagem, talvez agrupando múltiplas ações atrasadas para um único usuário em uma única notificação
     *   **Saída:** Passa os *payloads* formatados para o serviço de entrega.
 3.  **`Whatsapp::SendNotificationService`:**
     *   **Função:** Manipulador de comunicação externa.
