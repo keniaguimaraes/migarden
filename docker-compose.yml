@@ -21,7 +21,6 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.prod
-    command: sh -c "bundle exec rails db:migrate && bundle exec rails s -b 0.0.0.0 -p 3000"
     ports:
       - "3000:3000"
     environment:
