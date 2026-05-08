@@ -1,11 +1,9 @@
-# syntax=docker/dockerfile:1
-
-# Stage 1: Base
+# Use uma imagem base com Ruby
 FROM ruby:3.3.0-slim AS base
 
 # Install system dependencies
 RUN apt-get update -qq && \
-    apt-get install -y build-essential libpq-dev nodejs git curl wget && \
+    apt-get install -y build-essential libpq-dev nodejs postgresql-client git curl wget && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -57,3 +55,5 @@ USER rails
 ENV HOME=/home/rails
 
 EXPOSE 3000
+
+CMD ["sh", "-c", "rails db:migrate:status | grep 'down' > /dev/null && rails db:migrate || echo 'Migrações já aplicadas'; rails db:seed && rails server -b 0.0.0.0"]
