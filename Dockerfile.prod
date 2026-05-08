@@ -26,13 +26,8 @@ RUN bundle config set without 'development test' && bundle install
 # Copia o restante do código da aplicação
 COPY . .
 
-# Copia script de entrada
-COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN chmod +x /app/docker-entrypoint.sh
-
 # Expõe a porta que o Rails usa
 EXPOSE 3000
 
-# Define ENTRYPOINT para executar migrations antes do servidor
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+# Execute migrations and start server
+CMD ["sh", "-c", "bundle exec rails db:migrate --verbose && bundle exec rails assets:precompile && bundle exec rails server -b 0.0.0.0 -p ${PORT:-3000}"]
