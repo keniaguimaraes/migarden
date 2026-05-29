@@ -1,23 +1,36 @@
-# Dockerfile for Local Development
-FROM ruby:3.3.0-slim
+# Use uma imagem base com Ruby
+FROM ruby:3.1.0
 
-# Install system dependencies
+# Instala dependências
 RUN apt-get update -qq && \
-    apt-get install -y build-essential libpq-dev nodejs git curl cron && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends \
+    curl gnupg postgresql-client python3 python3-pip \
+    && pip3 install pandas \
+    && rm -rf /var/lib/apt/lists/*
 
+# Instala Node.js e npm via NodeSource
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
+
+# Instala Yarn (Node.js version) via npm
+RUN npm install -g yarn
+
+# Define o diretório de trabalho no contêiner
 WORKDIR /app
 
-# Development environment settings
-ENV RAILS_ENV=development
-
-# Install gems (not using deployment mode for easier local updates)
+# Copia Gemfile
 COPY Gemfile Gemfile.lock ./
-RUN bundle install
+RUN bundle install --jobs 4
 
-# Copy application code
+# Copia package.json
+COPY package.json yarn.lock* ./
+RUN yarn install
+
+# Copia código
 COPY . .
 
+# Expõe a porta
 EXPOSE 3000
 
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+# Comando para iniciar
+CMD ["sh", "-c", "rails db:migrate:status | grep 'down' > /dev/null && rails db:migrate || echo 'Migrações já aplicadas'; rails db:seed && rails server -b 0.0.0.0"]
