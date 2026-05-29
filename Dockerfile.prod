@@ -1,5 +1,5 @@
 # Use uma imagem base com Ruby
-FROM ruby:3.1.0
+FROM ruby:3.3.0
 
 # Instala dependências, Python3, pip, Node.js/Yarn para assets
 RUN apt-get update -qq && \
@@ -12,8 +12,9 @@ WORKDIR /app
 # Copia o Gemfile e Gemfile.lock para o contêiner
 COPY Gemfile Gemfile.lock ./
 
-# Instala as gems
-RUN bundle install --without development test
+# Instala as gems (usando método recomendado de bundle config)
+RUN bundle config set --local without 'development test' && \
+    bundle install
 
 # Copia o restante do código da aplicação
 COPY . .
