@@ -1,11 +1,5 @@
-<div class="page-header">
-  <div>
-    <h1 class="page-header__title">Nova planta</h1>
-    <p class="page-header__subtitle">Cadastre uma nova plantinha para o seu jardim.</p>
-  </div>
-  <%= link_to "Voltar", plants_path, class: "btn btn--ghost" %>
-</div>
-
-<div class="card">
-  <%= render "form", plant: @plant %>
-</div>
+<%= turbo_frame_tag "plant_modal" do %>
+  <%= render "shared/modal", title: "Nova planta" do %>
+    <%= render "form", plant: @plant %>
+  <% end %>
+<% end %>

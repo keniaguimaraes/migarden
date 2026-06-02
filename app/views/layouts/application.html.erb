@@ -19,6 +19,7 @@
           <%= yield %>
         </main>
       </div>
+      <%= turbo_frame_tag "plant_modal" %>
     <% else %>
       <div class="auth-layout">
         <%= render "shared/flash" %>

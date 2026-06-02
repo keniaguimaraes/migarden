@@ -584,6 +584,14 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 
 .plant-card__care strong { font-weight: 600; }
 
+.plant-card__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-ice-white);
+}
+
 /* =================== Badges =================== */
 
 .badge {
@@ -738,6 +746,93 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
   color: var(--color-muted);
   margin: 0;
   max-width: 400px;
+}
+
+/* =================== Modal =================== */
+
+body.modal-open {
+  overflow: hidden;
+}
+
+turbo-frame#plant_modal {
+  display: contents;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: modalFadeIn 0.15s ease;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(38, 49, 40, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.modal__content {
+  position: relative;
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 720px;
+  max-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  animation: modalSlideIn 0.2s ease;
+}
+
+@keyframes modalSlideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-soft-green);
+}
+
+.modal__title {
+  font-size: 1.25rem;
+  color: var(--color-deep-green);
+  margin: 0;
+}
+
+.modal__close {
+  background: transparent;
+  border: 0;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--color-muted);
+  cursor: pointer;
+  padding: 0 8px;
+  border-radius: 8px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.modal__close:hover {
+  background: var(--color-ice-white);
+  color: var(--color-deep-green);
+}
+
+.modal__body {
+  padding: 20px 24px 24px;
+  overflow-y: auto;
 }
 
 /* =================== Responsive =================== */

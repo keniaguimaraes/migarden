@@ -1,4 +1,4 @@
-<article class="plant-card card">
+<article id="plant_card_<%= plant.id %>" class="plant-card card">
   <% if plant.photo.attached? %>
     <%= image_tag plant.photo, class: "plant-card__photo", alt: plant.name %>
   <% else %>
@@ -34,5 +34,13 @@
         <strong><%= format_br_date(plant.next_pest_control_date) %></strong>
       </li>
     </ul>
+
+    <div class="plant-card__actions">
+      <%= link_to "Ver detalhes", plant_path(plant), class: "btn btn--ghost btn--sm" %>
+      <%= link_to "Editar",
+            edit_plant_path(plant),
+            data: { turbo_frame: "plant_modal" },
+            class: "btn btn--primary btn--sm" %>
+    </div>
   </div>
 </article>

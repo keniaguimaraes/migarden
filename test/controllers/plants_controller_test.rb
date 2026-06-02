@@ -18,10 +18,45 @@ class PlantsControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", "Minhas plantas"
   end
 
-  test "new renders form" do
+  test "new renders form inside a turbo frame for the modal" do
     get new_plant_path
     assert_response :success
+    assert_select "turbo-frame#plant_modal"
     assert_select "form"
+    assert_select ".modal"
+    assert_select ".modal__title", "Nova planta"
+  end
+
+  test "edit renders form inside a turbo frame for the modal" do
+    plant = plants(:one)
+    get edit_plant_path(plant)
+    assert_response :success
+    assert_select "turbo-frame#plant_modal"
+    assert_select "form"
+    assert_select ".modal__title", "Editar planta"
+  end
+
+  test "index has empty plant_modal frame available for turbo" do
+    get plants_path
+    assert_response :success
+    assert_select "turbo-frame#plant_modal"
+  end
+
+  test "update responds with turbo_stream for turbo requests" do
+    plant = plants(:one)
+    patch plant_path(plant), params: {
+      plant: { name: "Jiboia Renomeada", plant_type: plant.plant_type, sun_exposure: plant.sun_exposure }
+    }, as: :turbo_stream
+    assert_response :success
+  end
+
+  test "update persists changes" do
+    plant = plants(:one)
+    patch plant_path(plant), params: {
+      plant: { name: "Jiboia Renomeada", plant_type: plant.plant_type, sun_exposure: plant.sun_exposure }
+    }
+    assert_redirected_to plants_path
+    assert_equal "Jiboia Renomeada", plant.reload.name
   end
 
   test "create persists plant and 3 care parameters" do
@@ -41,14 +76,31 @@ class PlantsControllerTest < ActionDispatch::IntegrationTest
         }
       end
     end
-    assert_redirected_to plant_path(Plant.last)
+    assert_redirected_to plants_path
   end
 
-  test "create with invalid data re-renders new" do
+  test "create responds with turbo_stream for turbo requests" do
+    post plants_path, params: {
+      plant: {
+        name: "Hortelã",
+        plant_type: "Erva",
+        sun_exposure: "sol",
+        watering_interval_days: 2,
+        fertilization_interval_days: 30,
+        pest_control_interval_days: 60
+      }
+    }, as: :turbo_stream
+    assert_response :success
+    assert_match(/turbo-stream/, response.media_type)
+  end
+
+  test "create with invalid data re-renders new inside frame" do
     assert_no_difference "Plant.count" do
       post plants_path, params: { plant: { name: "" } }
     end
     assert_response :unprocessable_entity
+    assert_select "turbo-frame#plant_modal"
+    assert_select ".form__errors"
   end
 
   test "show renders plant detail" do

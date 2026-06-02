@@ -1,11 +1,5 @@
-<div class="page-header">
-  <div>
-    <h1 class="page-header__title">Editar planta</h1>
-    <p class="page-header__subtitle">Atualize as informações de <%= @plant.name %>.</p>
-  </div>
-  <%= link_to "Voltar", @plant, class: "btn btn--ghost" %>
-</div>
-
-<div class="card">
-  <%= render "form", plant: @plant %>
-</div>
+<%= turbo_frame_tag "plant_modal" do %>
+  <%= render "shared/modal", title: "Editar planta" do %>
+    <%= render "form", plant: @plant %>
+  <% end %>
+<% end %>

@@ -26,7 +26,12 @@ class PlantsController < ApplicationController
 
     if @plant.save
       sync_care_parameters(@plant)
-      redirect_to @plant, notice: "Planta cadastrada com sucesso!"
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream_create_response(@plant)
+        end
+        format.html { redirect_to plants_path, notice: "Planta cadastrada com sucesso!" }
+      end
     else
       ensure_care_parameter_placeholders(@plant)
       render :new, status: :unprocessable_entity
@@ -40,7 +45,12 @@ class PlantsController < ApplicationController
   def update
     if @plant.update(plant_params)
       sync_care_parameters(@plant)
-      redirect_to @plant, notice: "Planta atualizada com sucesso!"
+      respond_to do |format|
+        format.turbo_stream do
+          render turbo_stream: turbo_stream_update_response(@plant)
+        end
+        format.html { redirect_to plants_path, notice: "Planta atualizada com sucesso!" }
+      end
     else
       ensure_care_parameter_placeholders(@plant)
       render :edit, status: :unprocessable_entity
@@ -109,5 +119,25 @@ class PlantsController < ApplicationController
   def register_care(action_type, success_message)
     @plant.care_logs.create!(action_type: action_type, performed_at: Date.current)
     redirect_to @plant, notice: success_message
+  end
+
+  def turbo_stream_create_response(plant)
+    count = current_user.plants.count
+    streams = [
+      turbo_stream.append("plants_grid", partial: "plants/plant_card", locals: { plant: plant }),
+      turbo_stream.update("plant_modal", ""),
+      turbo_stream.update("plants_count", "<p id=\"plants_count\" class=\"page-header__subtitle\">#{view_context.pluralize(count, 'planta cadastrada', 'plantas cadastradas')} no seu jardim.</p>")
+    ]
+    if count == 1
+      streams << turbo_stream.remove("plants_empty")
+    end
+    streams
+  end
+
+  def turbo_stream_update_response(plant)
+    [
+      turbo_stream.replace("plant_card_#{plant.id}", partial: "plants/plant_card", locals: { plant: plant }),
+      turbo_stream.update("plant_modal", "")
+    ]
   end
 end
