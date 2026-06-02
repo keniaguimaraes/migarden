@@ -23,5 +23,5 @@ COPY . .
 # Expose port 3000
 EXPOSE 3000
 
-# Start the Rails server
-CMD ["sh", "-c", "bundle exec rails server -b 0.0.0.0"]
+# Start the Rails server via Puma
+CMD ["sh", "-c", "bundle exec puma -C config/puma.rb"]
