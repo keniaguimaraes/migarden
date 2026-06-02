@@ -8,7 +8,7 @@ RUN apt-get update -qq && apt-get install -y \
   npm \
   postgresql-client \
   imagemagick \
-  libvips
+  libvips && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
