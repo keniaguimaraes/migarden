@@ -1,7 +1,0 @@
-.git
-log
-tmp
-node_modules
-.env*
-storage/
-public/assets/

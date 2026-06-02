@@ -7,19 +7,11 @@
 # Ignore bundler config.
 /.bundle
 
-# Ignore the default SQLite database.
-/db/*.sqlite3
-/db/*.sqlite3-*
-
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
 !/log/.keep
 !/tmp/.keep
-
-.git
-
-node_modules
 
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
@@ -37,15 +29,3 @@ node_modules
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
-
-# Keep Gemfile.lock for consistent builds across platforms
-# /Gemfile.lock
-
-# Ignore environment files
-.env
-.env.local
-.env.*.local
-
-# Ignore local test guide
-/local_test_guide.md
-DEPLOY_RAILWAY.md
