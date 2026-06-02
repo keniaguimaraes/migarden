@@ -55,6 +55,11 @@
       <p class="settings__status settings__status--ok">
         ✓ Notificações WhatsApp configuradas para <strong><%= @user.callmebot_phone %></strong>.
       </p>
+      <%= button_to "📱 Enviar mensagem de teste",
+            test_whatsapp_settings_path,
+            method: :post,
+            class: "btn btn--primary btn--sm",
+            form: { data: { turbo_frame: "_top" } } %>
     <% else %>
       <p class="settings__status settings__status--warn">
         ⚠ Você ainda não receberá lembretes por WhatsApp até preencher ambos os campos.

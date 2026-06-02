@@ -3,7 +3,9 @@ Rails.application.routes.draw do
 
   resource :session, only: [:new, :create, :destroy]
   resources :users, only: [:new, :create]
-  resource :settings, only: [:show, :edit, :update]
+  resource :settings, only: [:show, :edit, :update] do
+    post :test_whatsapp, on: :collection
+  end
   resources :alerts, only: [:index]
 
   resources :plants do

@@ -73,4 +73,56 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     get edit_settings_path
     assert_redirected_to new_session_path
   end
+
+  test "test_whatsapp rejects missing credentials" do
+    @user.update!(callmebot_phone: nil, callmebot_api_key: nil)
+    with_stubbed_notifier(->(_u, _m) { success_response }) do
+      post test_whatsapp_settings_path
+    end
+    assert_redirected_to edit_settings_path
+    assert_match(/Preencha telefone e API key/, flash[:alert])
+  end
+
+  test "test_whatsapp succeeds with valid creds" do
+    @user.update!(callmebot_phone: "+5511999990000", callmebot_api_key: "abc123")
+    with_stubbed_notifier(->(_u, _m) { success_response }) do
+      post test_whatsapp_settings_path
+    end
+    assert_redirected_to edit_settings_path
+    assert_match(/Mensagem de teste enviada/, flash[:notice])
+  end
+
+  test "test_whatsapp reports failure on non-success response" do
+    @user.update!(callmebot_phone: "+5511999990000", callmebot_api_key: "bad")
+    with_stubbed_notifier(->(_u, _m) { failure_response }) do
+      post test_whatsapp_settings_path
+    end
+    assert_redirected_to edit_settings_path
+    assert_match(/Falha ao enviar/, flash[:alert])
+  end
+
+  private
+
+  def with_stubbed_notifier(behavior)
+    original = WhatsappNotifier.method(:send_message)
+    WhatsappNotifier.singleton_class.send(:define_method, :send_message) { |*args| behavior.call(*args) }
+    yield
+  ensure
+    WhatsappNotifier.singleton_class.send(:remove_method, :send_message) if WhatsappNotifier.singleton_class.method_defined?(:send_message)
+    WhatsappNotifier.singleton_class.send(:define_method, :send_message, original)
+  end
+
+  def success_response
+    Class.new do
+      def is_a?(klass); klass == Net::HTTPSuccess; end
+      def code; "200"; end
+    end.new
+  end
+
+  def failure_response
+    Class.new do
+      def is_a?(klass); klass == Net::HTTPServerError; end
+      def code; "500"; end
+    end.new
+  end
 end
