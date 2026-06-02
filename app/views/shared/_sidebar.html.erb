@@ -11,10 +11,10 @@
 
   <nav class="sidebar__nav">
     <%= link_to "Dashboard", root_path, class: "sidebar__link #{'sidebar__link--active' if current_page?(root_path)}" %>
-    <%= link_to "Minhas Plantas", plants_path, class: "sidebar__link #{'sidebar__link--active' if request.path.start_with?('/plants') && !current_page?(new_plant_path)}" %>
+    <%= link_to "Minhas Plantas", plants_path, class: "sidebar__link #{'sidebar__link--active' if current_page?(plants_path) || (request.path.start_with?('/plants/') && !current_page?(new_plant_path))}" %>
     <%= link_to "Nova Planta", new_plant_path, class: "sidebar__link #{'sidebar__link--active' if current_page?(new_plant_path)}" %>
-    <%= link_to "Alertas", "#", class: "sidebar__link" %>
-    <%= link_to "Configurações", "#", class: "sidebar__link" %>
+    <%= link_to "Alertas", alerts_path, class: "sidebar__link #{'sidebar__link--active' if current_page?(alerts_path)}" %>
+    <%= link_to "Configurações", edit_settings_path, class: "sidebar__link #{'sidebar__link--active' if request.path.start_with?('/settings')}" %>
   </nav>
 
   <div class="sidebar__footer">

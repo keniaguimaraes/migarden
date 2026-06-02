@@ -5,8 +5,11 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by(email: params[:email])
-    if user&.authenticate(params[:password])
+    email = params.dig(:session, :email) || params[:email]
+    password = params.dig(:session, :password) || params[:password]
+
+    user = User.find_by(email: email)
+    if user&.authenticate(password)
       reset_session
       session[:user_id] = user.id
       redirect_to root_path, notice: "Bem-vindo de volta, #{user.name}!"

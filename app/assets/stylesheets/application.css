@@ -320,6 +320,44 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
   padding-left: 20px;
 }
 
+/* =================== Settings =================== */
+
+.settings__section-title {
+  font-size: 1.05rem;
+  margin: 0 0 16px;
+  color: var(--color-deep-green);
+}
+
+.settings__hint {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  margin: 0 0 16px;
+}
+
+.settings__hint code {
+  background: var(--color-ice-white);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+
+.settings__status {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+}
+
+.settings__status--ok {
+  background: var(--color-soft-green);
+  color: var(--color-success);
+}
+
+.settings__status--warn {
+  background: #fdf3e0;
+  color: var(--color-warning);
+}
+
 /* =================== Auth =================== */
 
 .auth-card {
