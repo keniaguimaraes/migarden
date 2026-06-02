@@ -1,0 +1,22 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-header__title">Minhas plantas</h1>
+    <p class="page-header__subtitle"><%= pluralize(@plants.count, "planta cadastrada", "plantas cadastradas") %> no seu jardim.</p>
+  </div>
+  <%= link_to "Nova planta", new_plant_path, class: "btn btn--primary" %>
+</div>
+
+<% if @plants.any? %>
+  <div class="plant-grid">
+    <% @plants.each do |plant| %>
+      <%= render "plant_card", plant: plant %>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card empty-state-card">
+    <div class="empty-state__icon">🌱</div>
+    <h2 class="empty-state__title">Nenhuma planta ainda</h2>
+    <p class="empty-state__text">Comece cadastrando sua primeira planta para receber lembretes.</p>
+    <%= link_to "Cadastrar planta", new_plant_path, class: "btn btn--primary" %>
+  </div>
+<% end %>

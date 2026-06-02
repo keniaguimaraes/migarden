@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Migarden</title>
+    <title>migarden</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -11,6 +11,19 @@
   </head>
 
   <body>
-    <%= yield %>
+    <% if logged_in? %>
+      <div class="app-layout">
+        <%= render "shared/sidebar" %>
+        <main class="main-content">
+          <%= render "shared/flash" %>
+          <%= yield %>
+        </main>
+      </div>
+    <% else %>
+      <div class="auth-layout">
+        <%= render "shared/flash" %>
+        <%= yield %>
+      </div>
+    <% end %>
   </body>
 </html>

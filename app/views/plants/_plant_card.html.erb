@@ -1,0 +1,38 @@
+<article class="plant-card card">
+  <% if plant.photo.attached? %>
+    <%= image_tag plant.photo, class: "plant-card__photo", alt: plant.name %>
+  <% else %>
+    <div class="plant-card__photo plant-card__photo--placeholder">🌿</div>
+  <% end %>
+
+  <div class="plant-card__body">
+    <div class="plant-card__header">
+      <h3 class="plant-card__name">
+        <%= link_to plant.name, plant_path(plant) %>
+        <% if plant.nickname.present? %>
+          <span class="plant-card__nickname">"<%= plant.nickname %>"</span>
+        <% end %>
+      </h3>
+      <span class="<%= status_badge_class(plant) %>"><%= status_label(plant) %></span>
+    </div>
+
+    <p class="plant-card__meta">
+      <%= plant.plant_type %> · <%= sun_exposure_icon(plant.sun_exposure) %> <%= plant.sun_exposure_label %>
+    </p>
+
+    <ul class="plant-card__cares">
+      <li class="plant-card__care plant-card__care--<%= 'attention' if plant.needs_watering? %>">
+        <span>💧 Rega</span>
+        <strong><%= format_br_date(plant.next_watering_date) %></strong>
+      </li>
+      <li class="plant-card__care plant-card__care--<%= 'attention' if plant.needs_fertilization? %>">
+        <span>🧪 Fertilização</span>
+        <strong><%= format_br_date(plant.next_fertilization_date) %></strong>
+      </li>
+      <li class="plant-card__care plant-card__care--<%= 'attention' if plant.needs_pest_control? %>">
+        <span>🐛 Pragas</span>
+        <strong><%= format_br_date(plant.next_pest_control_date) %></strong>
+      </li>
+    </ul>
+  </div>
+</article>

@@ -1,0 +1,44 @@
+<div class="auth-card">
+  <div class="auth-card__brand">🌿 migarden</div>
+  <h1 class="auth-card__title">Criar sua conta</h1>
+  <p class="auth-card__subtitle">Comece a cuidar melhor das suas plantas hoje.</p>
+
+  <%= form_with model: @user, url: users_path, local: true, class: "form" do |f| %>
+    <% if @user.errors.any? %>
+      <div class="form__errors">
+        <strong>Não foi possível criar sua conta:</strong>
+        <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form__field">
+      <%= f.label :name, "Nome", class: "form__label" %>
+      <%= f.text_field :name, required: true, autofocus: true, class: "form__input" %>
+    </div>
+
+    <div class="form__field">
+      <%= f.label :email, "E-mail", class: "form__label" %>
+      <%= f.email_field :email, required: true, class: "form__input" %>
+    </div>
+
+    <div class="form__field">
+      <%= f.label :password, "Senha", class: "form__label" %>
+      <%= f.password_field :password, required: true, class: "form__input" %>
+    </div>
+
+    <div class="form__field">
+      <%= f.label :password_confirmation, "Confirmação de senha", class: "form__label" %>
+      <%= f.password_field :password_confirmation, required: true, class: "form__input" %>
+    </div>
+
+    <%= f.submit "Criar conta", class: "btn btn--primary btn--block" %>
+  <% end %>
+
+  <p class="auth-card__footer">
+    Já tem conta? <%= link_to "Entrar", new_session_path, class: "link" %>
+  </p>
+</div>

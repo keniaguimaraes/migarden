@@ -1,0 +1,75 @@
+<%= form_with model: plant, local: true, class: "form" do |f| %>
+  <% if plant.errors.any? %>
+    <div class="form__errors">
+      <strong>Não foi possível salvar a planta:</strong>
+      <ul>
+        <% plant.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form__grid">
+    <div class="form__field">
+      <%= f.label :name, "Nome da planta *", class: "form__label" %>
+      <%= f.text_field :name, required: true, class: "form__input" %>
+    </div>
+
+    <div class="form__field">
+      <%= f.label :nickname, "Apelido (opcional)", class: "form__label" %>
+      <%= f.text_field :nickname, class: "form__input", placeholder: "Ex: Jibinha" %>
+    </div>
+
+    <div class="form__field">
+      <%= f.label :plant_type, "Tipo da planta *", class: "form__label" %>
+      <%= f.text_field :plant_type, required: true, class: "form__input", placeholder: "Ex: Trepadeira, Suculenta" %>
+    </div>
+
+    <div class="form__field">
+      <%= f.label :species, "Espécie (opcional)", class: "form__label" %>
+      <%= f.text_field :species, class: "form__input", placeholder: "Ex: Epipremnum aureum" %>
+    </div>
+
+    <div class="form__field">
+      <%= f.label :sun_exposure, "Exposição solar *", class: "form__label" %>
+      <%= f.select :sun_exposure, Plant::SUN_EXPOSURES.map { |s| [s.humanize, s] }, { include_blank: "Selecione..." }, required: true, class: "form__input" %>
+    </div>
+
+    <div class="form__field">
+      <%= f.label :photo, "Foto (opcional)", class: "form__label" %>
+      <%= f.file_field :photo, accept: "image/*", class: "form__input" %>
+    </div>
+  </div>
+
+  <fieldset class="form__fieldset">
+    <legend class="form__legend">Frequências de cuidado (em dias)</legend>
+    <div class="form__grid">
+      <div class="form__field">
+        <%= label_tag "plant[watering_interval_days]", "Rega *", class: "form__label" %>
+        <%= number_field_tag "plant[watering_interval_days]",
+              current_interval(plant, :watering),
+              min: 1, required: true, class: "form__input" %>
+      </div>
+
+      <div class="form__field">
+        <%= label_tag "plant[fertilization_interval_days]", "Fertilização *", class: "form__label" %>
+        <%= number_field_tag "plant[fertilization_interval_days]",
+              current_interval(plant, :fertilization),
+              min: 1, required: true, class: "form__input" %>
+      </div>
+
+      <div class="form__field">
+        <%= label_tag "plant[pest_control_interval_days]", "Controle de pragas *", class: "form__label" %>
+        <%= number_field_tag "plant[pest_control_interval_days]",
+              current_interval(plant, :insecticide),
+              min: 1, required: true, class: "form__input" %>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="form__actions">
+    <%= f.submit (plant.persisted? ? "Atualizar planta" : "Cadastrar planta"), class: "btn btn--primary" %>
+    <%= link_to "Cancelar", (plant.persisted? ? plant_path(plant) : plants_path), class: "btn btn--ghost" %>
+  </div>
+<% end %>

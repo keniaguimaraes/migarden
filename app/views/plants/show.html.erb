@@ -1,0 +1,80 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-header__title"><%= @plant.name %></h1>
+    <p class="page-header__subtitle"><%= @plant.plant_type %><% if @plant.species.present? %> · <em><%= @plant.species %></em><% end %></p>
+  </div>
+  <div class="page-header__actions">
+    <%= link_to "Editar", edit_plant_path(@plant), class: "btn btn--ghost" %>
+    <%= button_to "Excluir", @plant, method: :delete, data: { turbo_confirm: "Tem certeza que deseja remover #{@plant.name}?" }, class: "btn btn--danger" %>
+  </div>
+</div>
+
+<div class="plant-detail">
+  <aside class="plant-detail__sidebar card">
+    <% if @plant.photo.attached? %>
+      <%= image_tag @plant.photo, class: "plant-detail__photo", alt: @plant.name %>
+    <% else %>
+      <div class="plant-detail__photo plant-detail__photo--placeholder">🌿</div>
+    <% end %>
+
+    <div class="plant-detail__info">
+      <div class="plant-detail__row">
+        <span class="plant-detail__label">Apelido</span>
+        <span class="plant-detail__value"><%= @plant.nickname.presence || "—" %></span>
+      </div>
+      <div class="plant-detail__row">
+        <span class="plant-detail__label">Exposição</span>
+        <span class="plant-detail__value"><%= sun_exposure_icon(@plant.sun_exposure) %> <%= @plant.sun_exposure_label %></span>
+      </div>
+      <div class="plant-detail__row">
+        <span class="plant-detail__label">Status</span>
+        <span class="<%= status_badge_class(@plant) %>"><%= status_label(@plant) %></span>
+      </div>
+    </div>
+  </aside>
+
+  <section class="plant-detail__main">
+    <div class="card plant-detail__care">
+      <h2 class="plant-detail__heading">Cuidados pendentes</h2>
+
+      <div class="care-grid">
+        <div class="care-card care-card--<%= 'attention' if @plant.needs_watering? %>">
+          <div class="care-card__icon">💧</div>
+          <div class="care-card__title">Rega</div>
+          <div class="care-card__next">Próxima: <%= format_br_date(@plant.next_watering_date) %></div>
+          <%= button_to "Marcar como regada", mark_as_watered_plant_path(@plant), method: :patch, class: "btn btn--primary btn--sm" %>
+        </div>
+
+        <div class="care-card care-card--<%= 'attention' if @plant.needs_fertilization? %>">
+          <div class="care-card__icon">🧪</div>
+          <div class="care-card__title">Fertilização</div>
+          <div class="care-card__next">Próxima: <%= format_br_date(@plant.next_fertilization_date) %></div>
+          <%= button_to "Marcar como fertilizada", mark_as_fertilized_plant_path(@plant), method: :patch, class: "btn btn--primary btn--sm" %>
+        </div>
+
+        <div class="care-card care-card--<%= 'attention' if @plant.needs_pest_control? %>">
+          <div class="care-card__icon">🐛</div>
+          <div class="care-card__title">Controle de pragas</div>
+          <div class="care-card__next">Próxima: <%= format_br_date(@plant.next_pest_control_date) %></div>
+          <%= button_to "Marcar controle realizado", mark_as_pest_controlled_plant_path(@plant), method: :patch, class: "btn btn--primary btn--sm" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="card plant-detail__history">
+      <h2 class="plant-detail__heading">Histórico recente</h2>
+      <% if @care_logs.any? %>
+        <ul class="history-list">
+          <% @care_logs.each do |log| %>
+            <li class="history-item">
+              <span class="history-item__date"><%= format_br_date(log.performed_at) %></span>
+              <span class="history-item__type"><%= log.action_type.humanize %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="empty-state">Nenhum cuidado registrado ainda.</p>
+      <% end %>
+    </div>
+  </section>
+</div>

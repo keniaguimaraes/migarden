@@ -1,0 +1,65 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-header__title">Olá, <%= current_user.name %> 🌿</h1>
+    <p class="page-header__subtitle">Aqui está um resumo do seu jardim hoje.</p>
+  </div>
+  <%= link_to "Nova planta", new_plant_path, class: "btn btn--primary" %>
+</div>
+
+<section class="summary-grid">
+  <div class="card summary-card">
+    <div class="summary-card__icon summary-card__icon--info">🌱</div>
+    <div class="summary-card__label">Total de plantas</div>
+    <div class="summary-card__value"><%= @total_plants %></div>
+  </div>
+
+  <div class="card summary-card">
+    <div class="summary-card__icon summary-card__icon--water">💧</div>
+    <div class="summary-card__label">Precisam de rega</div>
+    <div class="summary-card__value"><%= @needs_watering %></div>
+  </div>
+
+  <div class="card summary-card">
+    <div class="summary-card__icon summary-card__icon--fert">🧪</div>
+    <div class="summary-card__label">Precisam de fertilização</div>
+    <div class="summary-card__value"><%= @needs_fertilization %></div>
+  </div>
+
+  <div class="card summary-card">
+    <div class="summary-card__icon summary-card__icon--pest">🐛</div>
+    <div class="summary-card__label">Precisam de controle de pragas</div>
+    <div class="summary-card__value"><%= @needs_pest_control %></div>
+  </div>
+</section>
+
+<section class="dashboard__section">
+  <div class="dashboard__section-header">
+    <h2 class="dashboard__section-title">Plantas que precisam de atenção</h2>
+    <%= link_to "Ver todas", plants_path, class: "link" %>
+  </div>
+
+  <% if @plants_needing_care.any? %>
+    <div class="plant-grid">
+      <% @plants_needing_care.each do |plant| %>
+        <%= render "plants/plant_card", plant: plant %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="card empty-state-card">
+      <div class="empty-state__icon">✨</div>
+      <h2 class="empty-state__title">Tudo em dia!</h2>
+      <p class="empty-state__text">Nenhuma planta precisa de cuidado hoje. Aproveite o seu jardim.</p>
+    </div>
+  <% end %>
+</section>
+
+<% if @total_plants > @plants_needing_care.count && @plants_needing_care.any? %>
+  <section class="dashboard__section">
+    <h2 class="dashboard__section-title">Outras plantas</h2>
+    <div class="plant-grid">
+      <% (@plants - @plants_needing_care).each do |plant| %>
+        <%= render "plants/plant_card", plant: plant %>
+      <% end %>
+    </div>
+  </section>
+<% end %>

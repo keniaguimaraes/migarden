@@ -1,0 +1,23 @@
+<aside class="sidebar">
+  <div class="sidebar__brand">
+    <span class="sidebar__brand-icon">🌿</span>
+    <span class="sidebar__brand-text">migarden</span>
+  </div>
+
+  <div class="sidebar__user">
+    <div class="sidebar__user-name"><%= current_user.name %></div>
+    <div class="sidebar__user-email"><%= current_user.email %></div>
+  </div>
+
+  <nav class="sidebar__nav">
+    <%= link_to "Dashboard", root_path, class: "sidebar__link #{'sidebar__link--active' if current_page?(root_path)}" %>
+    <%= link_to "Minhas Plantas", plants_path, class: "sidebar__link #{'sidebar__link--active' if request.path.start_with?('/plants') && !current_page?(new_plant_path)}" %>
+    <%= link_to "Nova Planta", new_plant_path, class: "sidebar__link #{'sidebar__link--active' if current_page?(new_plant_path)}" %>
+    <%= link_to "Alertas", "#", class: "sidebar__link" %>
+    <%= link_to "Configurações", "#", class: "sidebar__link" %>
+  </nav>
+
+  <div class="sidebar__footer">
+    <%= button_to "Sair", session_path, method: :delete, class: "sidebar__logout", form: { class: "sidebar__logout-form" } %>
+  </div>
+</aside>
