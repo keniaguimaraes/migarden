@@ -57,7 +57,8 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: migarden_test
+  database: <%= ENV.fetch("DATABASE_NAME_TEST", "migarden_test") %>
+  url: <%= ENV["DATABASE_URL_TEST"] || ENV["DATABASE_URL"] %>
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is

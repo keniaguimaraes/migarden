@@ -9,7 +9,8 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Turn false under Spring and add config.action_view.cache_template_loading = true.
-  config.cache_classes = true
+  config.cache_classes = false
+  config.action_view.cache_template_loading = false
 
   # Eager loading loads your whole application. When running a single test locally,
   # this probably isn't necessary. It's a good idea to do in a continuous integration
@@ -17,23 +18,17 @@ Rails.application.configure do
   config.eager_load = ENV["CI"].present?
 
   # Configure public file server for tests with Cache-Control for performance.
-  config.public_file_server.enabled = true
-  config.public_file_server.headers = {
-    "Cache-Control" => "public, max-age=#{1.hour.to_i}"
-  }
+  config.public_file_server.headers = { "Cache-Control" => "public, max-age=3600" }
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
   config.cache_store = :null_store
 
-  # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
-
-  # Disable request forgery protection in test environment.
+  # Render exception templates instead of raising so we can assert 404s.
+  config.action_dispatch.show_exceptions = true
   config.action_controller.allow_forgery_protection = false
 
-  # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 
   config.action_mailer.perform_caching = false
@@ -49,12 +44,15 @@ Rails.application.configure do
   # Raise exceptions for disallowed deprecations.
   config.active_support.disallowed_deprecation = :raise
 
-  # Tell Active Support which deprecation messages to disallow.
+  # Tell Active Support which deprecations to not emit.
   config.active_support.disallowed_deprecation_warnings = []
 
-  # Raises error for missing translations.
-  # config.i18n.raise_on_missing_translations = true
+  # Raises warnings for the following deprecations.
+  config.active_support.deprecation_behavior = :stderr
 
-  # Annotate rendered view with file names.
-  # config.action_view.annotate_rendered_view_with_filenames = true
+  # Run tests in random order to surface order dependencies.
+  config.active_support.test_order = :random
+
+  # Raises errors for the following deprecations.
+  config.active_support.disallowed_deprecation_warnings = []
 end

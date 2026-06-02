@@ -1,13 +1,12 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+watering_log_one:
+  plant: one
+  action_type: 0
+  performed_at: <%= 10.days.ago.to_date %>
+  observation: Rega completa
+
+fertilization_log_one:
   plant: one
   action_type: 1
-  performed_at: 2026-06-02
-  observation: MyText
-
-two:
-  plant: two
-  action_type: 1
-  performed_at: 2026-06-02
-  observation: MyText
+  performed_at: <%= 35.days.ago.to_date %>

@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Maria
+  email: maria@example.com
+  password_digest: <%= BCrypt::Password.create('password', cost: BCrypt::Engine::MIN_COST) %>
+  callmebot_phone: "+5511999990001"
+  callmebot_api_key: testkey1
+
+two:
+  name: João
+  email: joao@example.com
+  password_digest: <%= BCrypt::Password.create('password', cost: BCrypt::Engine::MIN_COST) %>
+  callmebot_phone: "+5511999990002"
+  callmebot_api_key: testkey2

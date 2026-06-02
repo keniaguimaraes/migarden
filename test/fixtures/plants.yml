@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  name: Jiboia
+  plant_type: Trepadeira
+  sun_exposure: meia_sombra
+  species: Epipremnum aureum
+  nickname: Jibinha
+
+two:
+  user: two
+  name: Espada de São Jorge
+  plant_type: Suculenta
+  sun_exposure: sol
+  species: Sansevieria trifasciata
+  nickname: Espadinha
