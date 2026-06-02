@@ -1,24 +1,21 @@
 class Plant < ApplicationRecord
   belongs_to :user
+  has_many :care_parameters, dependent: :destroy
+  has_many :care_logs, dependent: :destroy
   has_one_attached :photo
 
-  validates :name, :plant_type, :sun_exposure, presence: true
-  validates :watering_frequency_days, :fertilization_frequency_days, :pest_control_frequency_days,
-            presence: true, numericality: { greater_than: 0 }
+  validates :name, presence: true
 
   def next_watering_date
-    return Date.current if last_watered_at.blank?
-    last_watered_at + watering_frequency_days.days
+    calculate_next_date(:watering)
   end
 
   def next_fertilization_date
-    return Date.current if last_fertilized_at.blank?
-    last_fertilized_at + fertilization_frequency_days.days
+    calculate_next_date(:fertilization)
   end
 
   def next_pest_control_date
-    return Date.current if last_pest_control_at.blank?
-    last_pest_control_at + pest_control_frequency_days.days
+    calculate_next_date(:insecticide)
   end
 
   def needs_watering?
@@ -31,5 +28,17 @@ class Plant < ApplicationRecord
 
   def needs_pest_control?
     next_pest_control_date <= Date.current
+  end
+
+  private
+
+  def calculate_next_date(action_type)
+    parameter = care_parameters.find_by(action_type: action_type)
+    return Date.current unless parameter
+
+    last_log = care_logs.where(action_type: action_type).order(performed_at: :desc).first
+    return Date.current unless last_log
+
+    last_log.performed_at + parameter.interval_days.days
   end
 end
