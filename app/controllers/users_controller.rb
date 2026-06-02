@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   skip_before_action :authenticate_user!, only: [:new, :create]
 
   def new
+    @user = User.new
   end
 
   def create
@@ -9,7 +10,7 @@ class UsersController < ApplicationController
     if @user.save
       reset_session
       session[:user_id] = @user.id
-      redirect_to root_path, notice: "Account created successfully! Welcome, #{@user.name}."
+      redirect_to root_path, notice: "Conta criada com sucesso! Bem-vindo, #{@user.name}."
     else
       render :new, status: :unprocessable_entity
     end

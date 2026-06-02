@@ -3,4 +3,12 @@ Rails.application.routes.draw do
 
   resource :session, only: [:new, :create, :destroy]
   resources :users, only: [:new, :create]
+
+  resources :plants do
+    member do
+      patch :mark_as_watered
+      patch :mark_as_fertilized
+      patch :mark_as_pest_controlled
+    end
+  end
 end

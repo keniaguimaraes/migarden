@@ -10,10 +10,10 @@ class ApplicationController < ActionController::Base
     current_user.present?
   end
 
-  def authenticate_user!
-    unless logged_in?
-      flash[:alert] = "You must be logged in to access this page."
-      redirect_to login_path
+    def authenticate_user!
+      unless logged_in?
+        flash[:alert] = "Você precisa estar logado para acessar esta página."
+        redirect_to new_session_path
+      end
     end
-  end
 end
