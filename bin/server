@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+
+# Don't pass -p flag, let Puma read PORT from environment via config/puma.rb
+exec bundle exec rails server -b 0.0.0.0
