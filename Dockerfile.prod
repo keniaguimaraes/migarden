@@ -23,8 +23,6 @@ RUN bundle config set --local without 'development test' \
 
 COPY . .
 
-RUN chmod +x bin/docker-entrypoint
-
 RUN SECRET_KEY_BASE=dummy bundle exec rails assets:precompile
 
 EXPOSE 3000
