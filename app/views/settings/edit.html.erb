@@ -55,17 +55,6 @@
       <p class="settings__status settings__status--ok">
         ✓ Notificações WhatsApp configuradas para <strong><%= @user.callmebot_phone %></strong>.
       </p>
-      <%= button_to "📱 Enviar mensagem de teste",
-            test_whatsapp_settings_path,
-            method: :post,
-            class: "btn btn--primary btn--sm",
-            form: { data: { turbo_frame: "_top" } } %>
-
-      <%= button_to "⏰ Forçar lembretes agora",
-            trigger_reminders_settings_path,
-            method: :post,
-            class: "btn btn--primary btn--sm",
-            form: { data: { turbo_frame: "_top" } } %>
     <% else %>
       <p class="settings__status settings__status--warn">
         ⚠ Você ainda não receberá lembretes por WhatsApp até preencher ambos os campos.
@@ -92,5 +81,21 @@
   <div class="form__actions">
     <%= f.submit "Salvar configurações", class: "btn btn--primary" %>
     <%= link_to "Cancelar", root_path, class: "btn btn--ghost" %>
+  </div>
+<% end %>
+
+<% if @user.callmebot_phone.present? && @user.callmebot_api_key.present? %>
+  <div class="settings__actions">
+    <%= button_to "📱 Enviar mensagem de teste",
+          test_whatsapp_settings_path,
+          method: :post,
+          class: "btn btn--primary btn--sm",
+          form: { data: { turbo_frame: "_top" } } %>
+
+    <%= button_to "⏰ Forçar lembretes agora",
+          trigger_reminders_settings_path,
+          method: :post,
+          class: "btn btn--primary btn--sm",
+          form: { data: { turbo_frame: "_top" } } %>
   </div>
 <% end %>
