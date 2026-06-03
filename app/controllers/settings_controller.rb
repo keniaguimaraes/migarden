@@ -1,4 +1,6 @@
 class SettingsController < ApplicationController
+  skip_before_action :verify_authenticity_token, only: [:test_whatsapp]
+
   def show
     redirect_to edit_settings_path
   end
@@ -17,10 +19,17 @@ class SettingsController < ApplicationController
     end
   end
 
+  def trigger_reminders
+    PlantReminderJob.perform_later
+    redirect_to edit_settings_path, notice: "Jobs de lembrete disparados com sucesso! Verifique seu WhatsApp e os logs do Worker."
+  end
+
   def test_whatsapp
     @user = current_user
+    Rails.logger.info("[TEST_WHATSAPP] Action called for #{@user.email}")
 
     if @user.callmebot_phone.blank? || @user.callmebot_api_key.blank?
+      Rails.logger.warn("[TEST_WHATSAPP] Missing credentials: phone=#{@user.callmebot_phone.present?}, key=#{@user.callmebot_api_key.present?}")
       redirect_to edit_settings_path, alert: "Preencha telefone e API key antes de testar."
       return
     end
