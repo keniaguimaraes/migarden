@@ -20,8 +20,14 @@ RUN bundle install
 # Copy the rest of the app
 COPY . .
 
+# Precompile assets
+RUN bundle exec rails assets:precompile
+
+# Cria os diretórios necessários para Puma
+RUN mkdir -p tmp/pids log
+
 # Expose port 3000
 EXPOSE 3000
 
 # Start the Rails server via Puma
-CMD ["sh", "-c", "bundle exec puma -C config/puma.rb"]
+CMD ["sh", "-c", "mkdir -p tmp/pids log && exec bundle exec puma -C config/puma.rb"]

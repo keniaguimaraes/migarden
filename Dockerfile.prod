@@ -11,6 +11,8 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     libpq-dev \
     postgresql-client \
     libvips \
+    nodejs \
+    npm \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
