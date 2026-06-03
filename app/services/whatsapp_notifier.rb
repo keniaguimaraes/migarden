@@ -27,9 +27,11 @@ class WhatsappNotifier
     response = http.request(request)
 
     if response.is_a?(Net::HTTPSuccess)
-      Rails.logger.info("[WhatsappNotifier] ✅ Success for #{@user.email}: #{response.body[0..100]}")
+      body = response.body.to_s.force_encoding("UTF-8")
+      Rails.logger.info("[WhatsappNotifier] ✅ Success for #{@user.email}: #{body[0..100]}")
     else
-      Rails.logger.error("[WhatsappNotifier] ❌ Error (#{response.code}) for #{@user.email}: #{response.body}")
+      body = response&.body.to_s.force_encoding("UTF-8")
+      Rails.logger.error("[WhatsappNotifier] ❌ Error (#{response&.code}) for #{@user.email}: #{body}")
     end
 
     response
