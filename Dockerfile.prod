@@ -25,6 +25,9 @@ COPY . .
 
 RUN SECRET_KEY_BASE=dummy bundle exec rails assets:precompile
 
+# Cria os diretórios necessários para Puma e aplicação
+RUN mkdir -p tmp/pids log && chmod 755 tmp
+
 EXPOSE 3000
 
-CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+CMD ["sh", "-c", "mkdir -p tmp/pids log && exec bundle exec puma -C config/puma.rb"]
