@@ -101,6 +101,14 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_match(/Falha ao enviar/, flash[:alert])
   end
 
+  test "test_queue_reminder enqueues a PlantReminderJob scheduled for the future" do
+    assert_enqueued_with(job: PlantReminderJob) do
+      post test_queue_reminder_settings_path
+    end
+    assert_redirected_to edit_settings_path
+    assert_match(/Job de teste enfileirado para/, flash[:notice])
+  end
+
   private
 
   def with_stubbed_notifier(behavior)

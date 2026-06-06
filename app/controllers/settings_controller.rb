@@ -24,6 +24,14 @@ class SettingsController < ApplicationController
     redirect_to edit_settings_path, notice: "Jobs de lembrete disparados com sucesso! Verifique seu WhatsApp e os logs do Worker."
   end
 
+  def test_queue_reminder
+    @user = current_user
+    run_at = 1.minute.from_now
+    PlantReminderJob.set(wait_until: run_at).perform_later
+    Rails.logger.info("[TEST_QUEUE] PlantReminderJob enfileirado para #{run_at.iso8601} por #{@user.email}")
+    redirect_to edit_settings_path, notice: "Job de teste enfileirado para #{run_at.strftime('%H:%M:%S')} (aprox. 1 min). Acompanhe nos logs do Worker."
+  end
+
   def test_whatsapp
     @user = current_user
     Rails.logger.info("[TEST_WHATSAPP] Action called for #{@user.email}")

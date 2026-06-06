@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resource :settings, only: [:show, :edit, :update] do
     post :test_whatsapp, on: :collection
     post :trigger_reminders, on: :collection
+    post :test_queue_reminder, on: :collection
   end
   resources :alerts, only: [:index]
 

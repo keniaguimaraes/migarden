@@ -97,5 +97,11 @@
           method: :post,
           class: "btn btn--primary btn--sm",
           form: { data: { turbo_frame: "_top" } } %>
+
+    <%= button_to "🧪 Testar fila (dispara em ~1 min)",
+          test_queue_reminder_settings_path,
+          method: :post,
+          class: "btn btn--primary btn--sm",
+          form: { data: { turbo_frame: "_top" } } %>
   </div>
 <% end %>
