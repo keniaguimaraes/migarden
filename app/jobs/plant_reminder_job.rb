@@ -12,6 +12,10 @@ class PlantReminderJob < ApplicationJob
         WhatsappNotifier.send_message(user, message)
       end
     end
+  rescue StandardError => e
+    Rails.logger.error("[PlantReminderJob] Error: #{e.class} - #{e.message}")
+    Rails.logger.error(e.backtrace&.first(10)&.join("\n"))
+    raise
   ensure
     reschedule_for_next_8am
   end
@@ -45,7 +49,7 @@ class PlantReminderJob < ApplicationJob
 
       Planta: #{plant.name}
       Tipo: #{plant.plant_type}
-      Hoje é dia de: #{pending_cares.to_sentence(locale: :pt)}
+      Hoje é dia de: #{pending_cares.to_sentence}
 
       💧 Próxima rega: #{plant.next_watering_date.strftime("%d/%m/%Y")}
       🧪 Próxima fertilização: #{plant.next_fertilization_date.strftime("%d/%m/%Y")}
