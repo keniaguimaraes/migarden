@@ -1,0 +1,43 @@
+current directory: /Users/keniaguimaraes/Projects/migarden/vendor/bundle/ruby/3.3.0/gems/io-console-0.8.2/ext/io/console
+/Users/keniaguimaraes/.rbenv/versions/3.3.0/bin/ruby extconf.rb
+checking for rb_syserr_fail_str(0, Qnil)... yes
+checking for rb_interned_str_cstr()... yes
+checking for rb_io_path() in ruby/io.h... yes
+checking for rb_io_descriptor() in ruby/io.h... yes
+checking for rb_io_get_write_io() in ruby/io.h... yes
+checking for rb_io_closed_p() in ruby/io.h... yes
+checking for rb_io_open_descriptor() in ruby/io.h... yes
+checking for rb_ractor_local_storage_value_newkey()... yes
+checking for termios.h... yes
+checking for cfmakeraw() in termios.h... yes
+checking for sys/ioctl.h... yes
+checking for HAVE_RUBY_FIBER_SCHEDULER_H... yes
+checking for ttyname_r()... yes
+creating Makefile
+
+current directory: /Users/keniaguimaraes/Projects/migarden/vendor/bundle/ruby/3.3.0/gems/io-console-0.8.2/ext/io/console
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260720-72508-vpl7em sitelibdir\=./.gem.20260720-72508-vpl7em clean
+
+current directory: /Users/keniaguimaraes/Projects/migarden/vendor/bundle/ruby/3.3.0/gems/io-console-0.8.2/ext/io/console
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260720-72508-vpl7em sitelibdir\=./.gem.20260720-72508-vpl7em
+compiling console.c
+In file included from console.c:9:
+In file included from /Users/keniaguimaraes/.rbenv/versions/3.3.0/include/ruby-3.3.0/ruby.h:38:
+In file included from /Users/keniaguimaraes/.rbenv/versions/3.3.0/include/ruby-3.3.0/ruby/ruby.h:28:
+In file included from /Users/keniaguimaraes/.rbenv/versions/3.3.0/include/ruby-3.3.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/keniaguimaraes/.rbenv/versions/3.3.0/include/ruby-3.3.0/ruby/internal/arithmetic/char.h:29:
+/Users/keniaguimaraes/.rbenv/versions/3.3.0/include/ruby-3.3.0/ruby/internal/core/rstring.h:398:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  398 |         struct RString retval;
+      |                        ^
+/Users/keniaguimaraes/.rbenv/versions/3.3.0/include/ruby-3.3.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+linking shared-object io/console.bundle
+
+current directory: /Users/keniaguimaraes/Projects/migarden/vendor/bundle/ruby/3.3.0/gems/io-console-0.8.2/ext/io/console
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260720-72508-vpl7em sitelibdir\=./.gem.20260720-72508-vpl7em install
+/usr/bin/install -c -m 0755 console.bundle ./.gem.20260720-72508-vpl7em/io
+
+current directory: /Users/keniaguimaraes/Projects/migarden/vendor/bundle/ruby/3.3.0/gems/io-console-0.8.2/ext/io/console
+make DESTDIR\= sitearchdir\=./.gem.20260720-72508-vpl7em sitelibdir\=./.gem.20260720-72508-vpl7em clean

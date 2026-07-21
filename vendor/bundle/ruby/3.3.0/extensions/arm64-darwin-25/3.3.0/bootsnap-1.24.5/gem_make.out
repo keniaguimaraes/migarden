@@ -1,0 +1,35 @@
+current directory: /Users/keniaguimaraes/Projects/migarden/vendor/bundle/ruby/3.3.0/gems/bootsnap-1.24.5/ext/bootsnap
+/Users/keniaguimaraes/.rbenv/versions/3.3.0/bin/ruby extconf.rb
+checking for fdatasync() in unistd.h... yes
+checking for fstatat() in sys/stat.h... yes
+checking for whether -D_GNU_SOURCE is accepted as CPPFLAGS... no
+checking for whether -O3 is accepted as CFLAGS... no
+checking for whether -std=c99 is accepted as CFLAGS... no
+creating Makefile
+
+current directory: /Users/keniaguimaraes/Projects/migarden/vendor/bundle/ruby/3.3.0/gems/bootsnap-1.24.5/ext/bootsnap
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260720-72508-rl65tv sitelibdir\=./.gem.20260720-72508-rl65tv clean
+
+current directory: /Users/keniaguimaraes/Projects/migarden/vendor/bundle/ruby/3.3.0/gems/bootsnap-1.24.5/ext/bootsnap
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260720-72508-rl65tv sitelibdir\=./.gem.20260720-72508-rl65tv
+compiling bootsnap.c
+In file included from bootsnap.c:14:
+In file included from /Users/keniaguimaraes/.rbenv/versions/3.3.0/include/ruby-3.3.0/ruby.h:38:
+In file included from /Users/keniaguimaraes/.rbenv/versions/3.3.0/include/ruby-3.3.0/ruby/ruby.h:28:
+In file included from /Users/keniaguimaraes/.rbenv/versions/3.3.0/include/ruby-3.3.0/ruby/internal/arithmetic.h:24:
+In file included from /Users/keniaguimaraes/.rbenv/versions/3.3.0/include/ruby-3.3.0/ruby/internal/arithmetic/char.h:29:
+/Users/keniaguimaraes/.rbenv/versions/3.3.0/include/ruby-3.3.0/ruby/internal/core/rstring.h:398:24: warning: default initialization of an object of type 'struct RString' with const member leaves the object uninitialized [-Wdefault-const-init-field-unsafe]
+  398 |         struct RString retval;
+      |                        ^
+/Users/keniaguimaraes/.rbenv/versions/3.3.0/include/ruby-3.3.0/ruby/internal/core/rbasic.h:88:17: note: member 'klass' declared 'const' here
+   88 |     const VALUE klass;
+      |                 ^
+1 warning generated.
+linking shared-object bootsnap/bootsnap.bundle
+
+current directory: /Users/keniaguimaraes/Projects/migarden/vendor/bundle/ruby/3.3.0/gems/bootsnap-1.24.5/ext/bootsnap
+make -j9 DESTDIR\= sitearchdir\=./.gem.20260720-72508-rl65tv sitelibdir\=./.gem.20260720-72508-rl65tv install
+/usr/bin/install -c -m 0755 bootsnap.bundle ./.gem.20260720-72508-rl65tv/bootsnap
+
+current directory: /Users/keniaguimaraes/Projects/migarden/vendor/bundle/ruby/3.3.0/gems/bootsnap-1.24.5/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20260720-72508-rl65tv sitelibdir\=./.gem.20260720-72508-rl65tv clean
