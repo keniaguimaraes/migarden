@@ -1,64 +1,18 @@
 common: &default_settings
-  # Nunca coloque a chave diretamente neste arquivo.
   license_key: <%= ENV["NEW_RELIC_LICENSE_KEY"] %>
-
-  # Configure no Railway:
-  # Web:    NEW_RELIC_APP_NAME=MiGarden Web
-  # Worker: NEW_RELIC_APP_NAME=MiGarden Worker
   app_name: <%= ENV.fetch("NEW_RELIC_APP_NAME", "MiGarden") %>
 
-  # Permite desligar o agente por variável de ambiente.
-  agent_enabled: <%= ENV.fetch("NEW_RELIC_AGENT_ENABLED", "true") == "true" %>
+  monitor_mode: true
+  log_level: info
 
-  # Nível dos logs internos do próprio agente New Relic.
-  log_level: <%= ENV.fetch("NEW_RELIC_LOG_LEVEL", "info") %>
-
-  # Coleta transações Rails, consultas, erros e jobs.
-  transaction_tracer:
-    enabled: true
-
-  error_collector:
-    enabled: true
-    capture_events: true
-
-  transaction_events:
-    enabled: true
-
-  span_events:
-    enabled: true
-
-  # Distributed tracing para relacionar requisições, banco,
-  # serviços externos e jobs em background.
   distributed_tracing:
     enabled: true
 
-  # Encaminhamento dos logs da aplicação ao New Relic.
   application_logging:
     enabled: true
-
     forwarding:
       enabled: true
-
-      # Encaminha info, warn, error e fatal.
-      # Evita enviar logs debug em produção.
-      log_level: <%= ENV.fetch(
-        "NEW_RELIC_APPLICATION_LOGGING_FORWARDING_LOG_LEVEL",
-        "info"
-      ) %>
-
-      # Limita o buffer de logs por processo.
-      # Pode ser sobrescrito no Railway.
-      max_samples_stored: <%= ENV.fetch(
-        "NEW_RELIC_APPLICATION_LOGGING_FORWARDING_MAX_SAMPLES_STORED",
-        "1000"
-      ).to_i %>
-
-      # Adiciona atributos próprios em todos os logs.
-      custom_attributes:
-        service: <%= ENV.fetch("SERVICE_NAME", "rails") %>
-        environment: <%= ENV.fetch("RAILS_ENV", "production") %>
-
-    # Vincula os logs locais aos traces e spans.
+      max_samples_stored: 1000
     local_decorating:
       enabled: true
 
@@ -69,10 +23,6 @@ development:
 test:
   <<: *default_settings
   monitor_mode: false
-
-staging:
-  <<: *default_settings
-  monitor_mode: true
 
 production:
   <<: *default_settings
