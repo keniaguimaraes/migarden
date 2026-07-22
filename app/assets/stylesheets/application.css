@@ -500,13 +500,6 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
   gap: 20px;
 }
 
-.plant-grid--mobile {
-  display: none;
-}
-
-.plant-table--desktop {
-  display: block;
-}
 
 .plant-card {
   display: flex;
@@ -628,7 +621,7 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
   color: var(--color-danger);
 }
 
-/* =================== Plant Table =================== */
+/* =================== Plant Table (Minhas Plantas) =================== */
 
 .plant-table {
   overflow-x: auto;
@@ -671,10 +664,8 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 }
 
 .plant-table__name {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  font-weight: 600;
+  color: var(--color-deep-green);
 }
 
 .plant-table__name-link {
@@ -685,17 +676,6 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 
 .plant-table__name-link:hover {
   text-decoration: underline;
-}
-
-.plant-table__date {
-  white-space: nowrap;
-  font-weight: 500;
-  color: var(--color-text);
-}
-
-.plant-table__date--attention {
-  color: var(--color-danger);
-  font-weight: 700;
 }
 
 .plant-table__actions {
@@ -928,17 +908,6 @@ turbo-frame#plant_modal {
 
 /* =================== Responsive =================== */
 
-/* Tablet (< 1024px) */
-@media (max-width: 1024px) {
-  .plant-grid {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  }
-
-  .plant-detail {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* Mobile (< 880px) */
 @media (max-width: 880px) {
   .app-layout {
@@ -1025,11 +994,11 @@ turbo-frame#plant_modal {
     grid-template-columns: 1fr;
   }
 
+  /* Plant table vira cards em mobile */
   .plant-table table {
     min-width: 100%;
   }
 
-  /* Tabela vira cards em mobile */
   .plant-table {
     display: none;
   }
@@ -1041,14 +1010,6 @@ turbo-frame#plant_modal {
     background: transparent;
     box-shadow: none;
     overflow: visible;
-  }
-
-  .plant-table--desktop {
-    display: none;
-  }
-
-  .plant-grid--mobile {
-    display: grid;
   }
 
   .modal__content {

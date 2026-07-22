@@ -39,48 +39,7 @@
   </div>
 
   <% if @plants_needing_care.any? %>
-    <div class="plant-table plant-table--desktop" id="dashboard_needing_care_table">
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Tipo</th>
-            <th>Rega</th>
-            <th>Fertilização</th>
-            <th>Pragas</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @plants_needing_care.each do |plant| %>
-            <tr>
-              <td>
-                <div class="plant-table__name">
-                  <%= link_to plant.name, plant_path(plant), class: "plant-table__name-link" %>
-                  <span class="<%= status_badge_class(plant) %>"><%= status_label(plant) %></span>
-                </div>
-              </td>
-              <td><%= plant.plant_type %></td>
-              <td class="<%= 'plant-table__date--attention' if plant.needs_watering? %>"><%= format_br_date(plant.next_watering_date) %></td>
-              <td class="<%= 'plant-table__date--attention' if plant.needs_fertilization? %>"><%= format_br_date(plant.next_fertilization_date) %></td>
-              <td class="<%= 'plant-table__date--attention' if plant.needs_pest_control? %>"><%= format_br_date(plant.next_pest_control_date) %></td>
-              <td>
-                <div class="plant-table__actions">
-                  <%= link_to "👁", plant_path(plant), class: "btn btn--ghost btn--sm btn--icon", title: "Ver detalhes" %>
-                  <%= link_to "💧",
-                        mark_as_watered_plant_path(plant),
-                        data: { turbo_method: :patch, turbo_confirm: "Marcar #{plant.name} como regada?" },
-                        class: "btn btn--primary btn--sm btn--icon",
-                        title: "Marcar como regada" %>
-                </div>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="plant-grid plant-grid--mobile">
+    <div class="plant-grid">
       <% @plants_needing_care.each do |plant| %>
         <%= render "plants/plant_card", plant: plant %>
       <% end %>
@@ -97,38 +56,7 @@
 <% if @total_plants > @plants_needing_care.count && @plants_needing_care.any? %>
   <section class="dashboard__section">
     <h2 class="dashboard__section-title">Outras plantas</h2>
-
-    <div class="plant-table plant-table--desktop" id="dashboard_other_plants_table">
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Tipo</th>
-            <th>Rega</th>
-            <th>Fertilização</th>
-            <th>Pragas</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% (@plants - @plants_needing_care).each do |plant| %>
-            <tr>
-              <td>
-                <div class="plant-table__name">
-                  <%= link_to plant.name, plant_path(plant), class: "plant-table__name-link" %>
-                  <span class="badge badge--success"><%= status_label(plant) %></span>
-                </div>
-              </td>
-              <td><%= plant.plant_type %></td>
-              <td class="<%= 'plant-table__date--attention' if plant.needs_watering? %>"><%= format_br_date(plant.next_watering_date) %></td>
-              <td class="<%= 'plant-table__date--attention' if plant.needs_fertilization? %>"><%= format_br_date(plant.next_fertilization_date) %></td>
-              <td class="<%= 'plant-table__date--attention' if plant.needs_pest_control? %>"><%= format_br_date(plant.next_pest_control_date) %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="plant-grid plant-grid--mobile">
+    <div class="plant-grid">
       <% (@plants - @plants_needing_care).each do |plant| %>
         <%= render "plants/plant_card", plant: plant %>
       <% end %>
