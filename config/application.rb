@@ -18,6 +18,8 @@ module Migarden
     #
     config.active_job.queue_adapter = :solid_queue
 
+    config.i18n.default_locale = :'pt-BR'
+
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
   end
