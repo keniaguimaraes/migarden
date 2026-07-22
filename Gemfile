@@ -58,6 +58,9 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem "minitest", "~> 5.20"
+  gem "rubocop", "~> 1.60", require: false
+  gem "rubocop-rails", "~> 2.23", require: false
+  gem "rubocop-minitest", "~> 0.35", require: false
 end
 
 group :development do
