@@ -14,9 +14,9 @@ class Plant < ApplicationRecord
 
   def sun_exposure_label
     case sun_exposure
-    when "sombra" then "Sombra"
-    when "meia_sombra" then "Meia Sombra"
-    when "sol" then "Sol"
+    when 'sombra' then 'Sombra'
+    when 'meia_sombra' then 'Meia Sombra'
+    when 'sol' then 'Sol'
     else sun_exposure
     end
   end
@@ -58,7 +58,7 @@ class Plant < ApplicationRecord
   end
 
   def care_status
-    needs_any_care? ? "atrasada" : "em_dia"
+    needs_any_care? ? 'atrasada' : 'em_dia'
   end
 
   private

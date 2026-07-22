@@ -2,15 +2,8 @@ class PlantReminderJob < ApplicationJob
   queue_as :default
 
   def perform
-    User.includes(plants: [:care_parameters, :care_logs]).find_each do |user|
-      next unless user.callmebot_phone.present? && user.callmebot_api_key.present?
-
-      user.plants.each do |plant|
-        message = build_message(plant)
-        next if message.nil?
-
-        WhatsappNotifier.send_message(user, message)
-      end
+    User.includes(plants: %i[care_parameters care_logs]).find_each do |user|
+      process_user(user)
     end
   rescue StandardError => e
     Rails.logger.error("[PlantReminderJob] Error: #{e.class} - #{e.message}")
@@ -32,15 +25,26 @@ class PlantReminderJob < ApplicationJob
 
   private
 
+  def process_user(user)
+    return unless user.callmebot_phone.present? && user.callmebot_api_key.present?
+
+    user.plants.each do |plant|
+      message = build_message(plant)
+      next if message.nil?
+
+      WhatsappNotifier.send_message(user, message)
+    end
+  end
+
   def reschedule_for_next_8am
     self.class.reschedule_for_next_8am
   end
 
   def build_message(plant)
     pending_cares = []
-    pending_cares << "regar"               if plant.needs_watering?
-    pending_cares << "fertilizar"          if plant.needs_fertilization?
-    pending_cares << "fazer controle de pragas" if plant.needs_pest_control?
+    pending_cares << 'regar'               if plant.needs_watering?
+    pending_cares << 'fertilizar'          if plant.needs_fertilization?
+    pending_cares << 'fazer controle de pragas' if plant.needs_pest_control?
 
     return nil if pending_cares.empty?
 
@@ -51,9 +55,9 @@ class PlantReminderJob < ApplicationJob
       Tipo: #{plant.plant_type}
       Hoje é dia de: #{pending_cares.to_sentence}
 
-      💧 Próxima rega: #{plant.next_watering_date.strftime("%d/%m/%Y")}
-      🧪 Próxima fertilização: #{plant.next_fertilization_date.strftime("%d/%m/%Y")}
-      🐛 Próximo controle de pragas: #{plant.next_pest_control_date.strftime("%d/%m/%Y")}
+      💧 Próxima rega: #{plant.next_watering_date.strftime('%d/%m/%Y')}
+      🧪 Próxima fertilização: #{plant.next_fertilization_date.strftime('%d/%m/%Y')}
+      🐛 Próximo controle de pragas: #{plant.next_pest_control_date.strftime('%d/%m/%Y')}
     MSG
   end
 end

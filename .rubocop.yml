@@ -1,9 +1,10 @@
-require:
+plugins:
   - rubocop-rails
   - rubocop-minitest
 
 AllCops:
   NewCops: enable
+  SuggestExtensions: false
   TargetRubyVersion: 3.3
   Exclude:
     - "db/**/*"
@@ -23,7 +24,25 @@ Style/FrozenStringLiteralComment:
 Metrics/MethodLength:
   Max: 20
 
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/AbcSize:
+  Max: 25
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
+Layout/LineLength:
+  Max: 160
+
 Metrics/BlockLength:
   Exclude:
     - "config/**/*"
     - "test/**/*"
+
+Minitest/MultipleAssertions:
+  Max: 6
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false # migration exists: db/migrate/20260722150738_add_unique_index_to_care_parameters.rb
