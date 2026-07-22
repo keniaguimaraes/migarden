@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Ciclo de Cuidado da Planta",
+    "subtitle": "Máquina de estados do ciclo — rega, fertilização, controle de pragas",
+    "output": "docs/plant-care-lifecycle.html",
+    "viewBox": [980, 700],
+    "quality_profile": "standard"
+  },
+  "lanes": [
+    { "id": "main", "label": "Fase do cuidado" },
+    { "id": "notification", "label": "Eventos de notificação" },
+    { "id": "terminal", "label": "Estados terminais" }
+  ],
+  "states": [
+    { "id": "registered", "type": "start", "label": "Cadastrada", "sublabel": "estado inicial", "lane": "main", "col": 0, "step": "01", "tag": "entrada" },
+    { "id": "em_dia", "type": "active", "label": "Em Dia", "sublabel": "todos cuidados em dia", "lane": "main", "col": 1, "step": "02", "tag": "ok" },
+    { "id": "atrasada", "type": "failure", "label": "Atrasada", "sublabel": "um ou mais cuidados vencidos", "lane": "main", "col": 2, "step": "03", "tag": "atraso" },
+    { "id": "cuidado_realizado", "type": "active", "label": "Cuidado Feito", "sublabel": "ação de cuidado registrada", "lane": "main", "col": 3, "step": "04", "tag": "ação" },
+    { "id": "proximo", "type": "waiting", "label": "Próximo", "sublabel": "cuidado próximo do vencimento", "lane": "notification", "col": 1, "tag": "aviso" },
+    { "id": "whatsapp", "type": "waiting", "label": "WhatsApp", "sublabel": "notificação enviada", "lane": "notification", "col": 0, "tag": "notificado" },
+    { "id": "sem_parametros", "type": "failure", "label": "Sem Parâmetros", "sublabel": "config de cuidado ausente", "lane": "terminal", "col": 0, "tag": "aviso" },
+    { "id": "excluida", "type": "failure", "label": "Excluída", "sublabel": "planta deletada", "lane": "terminal", "col": 2, "tag": "removido" }
+  ],
+  "transitions": [
+    { "id": "reg-to-emdia", "from": "registered", "to": "em_dia", "variant": "emphasis" },
+    { "id": "emdia-to-proximo", "from": "em_dia", "to": "proximo", "label": "tempo passa", "variant": "default", "fromSide": "bottom", "toSide": "top" },
+    { "id": "proximo-to-atrasada", "from": "proximo", "to": "atrasada", "label": "não realizado", "variant": "security", "fromSide": "right", "toSide": "left", "labelAt": [420, 240] },
+    { "id": "atrasada-to-whatsapp", "from": "atrasada", "to": "whatsapp", "label": "job de lembrete", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "labelAt": [420, 265] },
+    { "id": "atrasada-to-cuidado", "from": "atrasada", "to": "cuidado_realizado", "label": "usuário marca feito", "variant": "emphasis", "labelAt": [590, 202] },
+    { "id": "proximo-to-cuidado", "from": "proximo", "to": "cuidado_realizado", "variant": "emphasis", "fromSide": "bottom", "toSide": "left", "via": [[576, 350], [576, 195]] },
+    { "id": "emdia-again", "from": "cuidado_realizado", "to": "em_dia", "variant": "emphasis", "fromSide": "top", "toSide": "top", "via": [[556, 112], [250, 112]] }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Ciclo Principal",
+      "items": [
+        "Cada tipo de cuidado (rega/fertilização/praga) segue o mesmo ciclo",
+        "Em Dia e Cuidado Feito são estados transitórios",
+        "Status da planta = Em Dia se todos os cuidados estiverem em dia"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Notificações",
+      "items": [
+        "WhatsApp enviado apenas quando atrasada e o job de lembrete roda",
+        "Job se reagenda diariamente às 08:00",
+        "Usuários sem credenciais CallMeBot são pulados"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Modelo de Dados",
+      "items": [
+        "CareParameter armazena interval_days por action_type",
+        "CareLog armazena cada performed_at",
+        "Próxima data = último CareLog + interval_days"
+      ]
+    }
+  ]
+}

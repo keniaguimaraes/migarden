@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Fluxo de Lembrete Diário",
+    "subtitle": "Job em background — PlantReminderJob através da Solid Queue até o WhatsApp",
+    "output": "docs/daily-reminder-flow.html",
+    "viewBox": [920, 820],
+    "quality_profile": "standard"
+  },
+  "participants": [
+    { "id": "cron", "type": "external", "label": "Agendador", "sublabel": "08:00 diário" },
+    { "id": "job", "type": "backend", "label": "ReminderJob", "sublabel": "classe Active Job" },
+    { "id": "queue", "type": "messagebus", "label": "Solid Queue", "sublabel": "fila via banco" },
+    { "id": "worker", "type": "backend", "label": "Worker", "sublabel": "processador" },
+    { "id": "db", "type": "database", "label": "PostgreSQL", "sublabel": "usuários + plantas + cuidados" },
+    { "id": "callmebot", "type": "external", "label": "CallMeBot", "sublabel": "API WhatsApp" }
+  ],
+  "segments": [
+    { "from": 140, "to": 250, "label": "Agendamento" },
+    { "from": 270, "to": 430, "label": "Processamento" },
+    { "from": 450, "to": 680, "label": "Notificação" }
+  ],
+  "messages": [
+    { "from": "cron", "to": "queue", "y": 175, "label": "enfileirar", "variant": "dashed" },
+    { "from": "queue", "to": "worker", "y": 225, "label": "desenfileirar 08:00", "variant": "emphasis" },
+    { "from": "worker", "to": "job", "y": 285, "label": "executar", "variant": "emphasis" },
+    { "from": "job", "to": "db", "y": 340, "label": "User.includes(:plants)", "variant": "default" },
+    { "from": "db", "to": "job", "y": 380, "label": "usuários + plantas + parâmetros", "variant": "return" },
+    { "from": "job", "to": "db", "y": 440, "label": "precisa regar? etc", "variant": "default" },
+    { "from": "db", "to": "job", "y": 478, "label": "datas + intervalos", "variant": "return" },
+    { "from": "job", "to": "callmebot", "y": 530, "label": "enviar mensagem", "variant": "security" },
+    { "from": "callmebot", "to": "job", "y": 580, "label": "HTTP 200 / erro", "variant": "return" },
+    { "from": "job", "to": "queue", "y": 640, "label": "reagendar próximo 08:00", "variant": "dashed" }
+  ],
+  "activations": [
+    { "participant": "worker", "from": 220, "to": 660, "type": "backend" },
+    { "participant": "job", "from": 280, "to": 660, "type": "backend" },
+    { "participant": "db", "from": 335, "to": 475, "type": "database" },
+    { "participant": "callmebot", "from": 525, "to": 585, "type": "external" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Auto-Reagendamento",
+      "items": [
+        "Job se reagenda para o próximo dia às 08:00 via ensure block",
+        "Nenhum cron externo necessário após o primeiro disparo manual",
+        "Usa Active Job wait_until para timing preciso"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Credenciais por Usuário",
+      "items": [
+        "Cada usuário tem seu próprio callmebot_phone + callmebot_api_key",
+        "Usuários sem credenciais são pulados silenciosamente",
+        "Todas as credenciais armazenadas criptografadas no PostgreSQL"
+      ]
+    }
+  ]
+}

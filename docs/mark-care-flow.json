@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Marcar Cuidado como Realizado",
+    "subtitle": "Usuário clica em 'Marcar como regada' — fluxo interativo",
+    "output": "docs/mark-care-flow.html",
+    "viewBox": [820, 780],
+    "quality_profile": "standard"
+  },
+  "participants": [
+    { "id": "user", "type": "external", "label": "Usuário", "sublabel": "navegador" },
+    { "id": "router", "type": "backend", "label": "Rails Router", "sublabel": "config/routes.rb" },
+    { "id": "controller", "type": "backend", "label": "Controller", "sublabel": "mark_as_watered" },
+    { "id": "auth", "type": "security", "label": "Autenticação", "sublabel": "filtro de sessão" },
+    { "id": "plant", "type": "database", "label": "Model Plant", "sublabel": "current_user.plants" },
+    { "id": "care_log", "type": "database", "label": "CareLog", "sublabel": "action_type + data" },
+    { "id": "view", "type": "frontend", "label": "View / Turbo", "sublabel": "show.html.erb" }
+  ],
+  "segments": [
+    { "from": 140, "to": 290, "label": "Requisição" },
+    { "from": 310, "to": 480, "label": "Autenticação + Busca" },
+    { "from": 500, "to": 690, "label": "Atualização + Resposta" }
+  ],
+  "messages": [
+    { "id": "user-click", "from": "user", "to": "router", "y": 175, "label": "PATCH /plants/1/mark_as_watered", "variant": "emphasis" },
+    { "id": "router-dispatch", "from": "router", "to": "controller", "y": 220, "label": "despachar ação", "variant": "default" },
+    { "id": "auth-check", "from": "controller", "to": "auth", "y": 270, "label": "authenticate_user!", "variant": "security" },
+    { "id": "auth-ok", "from": "auth", "to": "controller", "y": 305, "label": "sessão válida", "variant": "return" },
+    { "id": "find-plant", "from": "controller", "to": "plant", "y": 355, "label": "current_user.plants.find", "variant": "default" },
+    { "id": "plant-return", "from": "plant", "to": "controller", "y": 390, "label": "planta escopada", "variant": "return" },
+    { "id": "create-log", "from": "controller", "to": "care_log", "y": 445, "label": "create!(action_type: :watering, performed_at: hoje)", "variant": "emphasis" },
+    { "id": "log-saved", "from": "care_log", "to": "controller", "y": 490, "label": "persistido", "variant": "return" },
+    { "id": "redirect", "from": "controller", "to": "view", "y": 550, "label": "redirect_to @plant", "variant": "default" },
+    { "id": "view-render", "from": "view", "to": "user", "y": 605, "label": "página show + flash notice", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "controller", "from": 215, "to": 570, "type": "backend" },
+    { "participant": "auth", "from": 265, "to": 310, "type": "security" },
+    { "participant": "plant", "from": 350, "to": 500, "type": "database" },
+    { "participant": "care_log", "from": 440, "to": 495, "type": "database" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Acesso Escopado",
+      "items": [
+        "Planta buscada via current_user.plants — nunca Plant.find",
+        "Impede acesso a plantas de outros usuários",
+        "Filtro de autenticação executa antes de qualquer ação"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Trilha de Auditoria (CareLog)",
+      "items": [
+        "Cada ação de cuidado cria uma nova linha em CareLog",
+        "Próxima data calculada a partir do último log + intervalo do parâmetro",
+        "Histórico completo preservado para dashboard e alertas"
+      ]
+    }
+  ]
+}

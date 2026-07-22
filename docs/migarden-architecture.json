@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Arquitetura migarden",
+    "subtitle": "Sistema de controle de cuidados com plantas — módulos, componentes, dependências",
+    "output": "docs/migarden-architecture.html",
+    "quality_profile": "standard",
+    "visual_preset": "classic",
+    "views": [
+      {
+        "id": "request-path",
+        "label": "Caminho da requisição",
+        "focus": ["browser", "railway", "puma_app", "postgres"],
+        "note": "Acompanhe a requisição do navegador até o banco de dados."
+      },
+      {
+        "id": "background-jobs",
+        "label": "Jobs em background",
+        "focus": ["puma_app", "solid_queue", "worker", "callmebot"],
+        "note": "Jobs de lembrete diário passam pela Solid Queue até o WhatsApp."
+      }
+    ]
+  },
+  "components": [
+    { "id": "browser", "type": "external", "label": "Navegador", "sublabel": "dispositivo do usuário", "pos": [40, 300], "size": [110, 60] },
+    { "id": "railway", "type": "cloud", "label": "Railway Docker", "sublabel": "runtime de produção", "pos": [220, 300], "size": [120, 60], "tag": "infra" },
+    { "id": "puma_app", "type": "backend", "label": "Aplicação Rails", "sublabel": "Puma + Controllers + Models + Views", "pos": [420, 300], "size": [140, 80], "tag": "lógica de negócio" },
+    { "id": "postgres", "type": "database", "label": "PostgreSQL", "sublabel": "banco de dados principal", "pos": [680, 300], "size": [120, 60] },
+    { "id": "solid_queue", "type": "database", "label": "Solid Queue", "sublabel": "fila de jobs via banco", "pos": [680, 480], "size": [120, 60], "tag": "mesmo PG" },
+    { "id": "worker", "type": "backend", "label": "Worker", "sublabel": "processador background", "pos": [420, 560], "size": [120, 60], "tag": "worker process" },
+    { "id": "active_storage", "type": "cloud", "label": "Active Storage", "sublabel": "upload de fotos", "pos": [680, 120], "size": [120, 60] },
+    { "id": "callmebot", "type": "external", "label": "CallMeBot", "sublabel": "API WhatsApp", "pos": [900, 560], "size": [110, 60] },
+    { "id": "monitoring", "type": "external", "label": "Monitoramento", "sublabel": "Sentry + NewRelic", "pos": [900, 120], "size": [120, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Railway Platform (containers Docker)", "wraps": ["puma_app", "postgres", "solid_queue", "worker", "active_storage"] }
+  ],
+  "connections": [
+    { "id": "browser-to-railway", "from": "browser", "to": "railway", "label": "HTTPS", "variant": "emphasis" },
+    { "id": "railway-to-app", "from": "railway", "to": "puma_app", "label": "porta :3000", "variant": "emphasis" },
+    { "id": "app-to-pg", "from": "puma_app", "to": "postgres", "label": "Active Record SQL", "variant": "emphasis" },
+    { "id": "app-to-queue", "from": "puma_app", "to": "solid_queue", "label": "enfileirar jobs", "variant": "dashed", "fromSide": "bottom", "toSide": "bottom", "via": [[490, 400], [740, 400], [740, 480]] },
+    { "id": "app-to-storage", "from": "puma_app", "to": "active_storage", "label": "armazenar fotos", "variant": "dashed", "fromSide": "top", "toSide": "right", "via": [[490, 200], [740, 200], [740, 120]] },
+    { "id": "queue-to-worker", "from": "solid_queue", "to": "worker", "label": "desenfileirar jobs", "variant": "emphasis", "fromSide": "left", "toSide": "right", "via": [[680, 510], [540, 510], [540, 560]] },
+    { "id": "worker-to-callmebot", "from": "worker", "to": "callmebot", "label": "HTTP WhatsApp", "variant": "security" },
+    { "id": "app-to-monitoring", "from": "puma_app", "to": "monitoring", "label": "erros + performance", "variant": "dashed", "fromSide": "top", "toSide": "right", "via": [[490, 200], [900, 200], [900, 120]] }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Stack Principal", "items": ["Ruby 3.3 + Rails 7.0", "PostgreSQL (dados + fila de jobs)", "Hotwire (Turbo + Stimulus)", "Active Storage para upload de fotos"] },
+    { "dot": "cyan", "title": "Jobs em Background", "items": ["Solid Queue (via banco, sem Redis)", "PlantReminderJob roda diariamente às 08:00", "WhatsApp via API CallMeBot"] },
+    { "dot": "rose", "title": "Segurança", "items": ["bcrypt para hash de senhas", "Autenticação por sessão (sem Devise)", "Credenciais WhatsApp por usuário", "Queries escopadas: current_user.plants"] },
+    { "dot": "orange", "title": "Infraestrutura", "items": ["Docker local + Railway produção", "PostgreSQL com health check", "Logs via STDOUT + Lograge", "Sentry + NewRelic para monitoramento"] }
+  ]
+}
