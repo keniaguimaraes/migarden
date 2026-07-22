@@ -26,6 +26,10 @@
       </tbody>
     </table>
   </div>
+
+  <div class="plant-table plant-table--mobile-cards" id="plants_mobile_cards">
+    <%= render partial: "plants/plant_card", collection: @plants, as: :plant %>
+  </div>
 <% else %>
   <div class="card empty-state-card" id="plants_empty">
     <div class="empty-state__icon">🌱</div>

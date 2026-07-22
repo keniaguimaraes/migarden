@@ -920,6 +920,18 @@ turbo-frame#plant_modal {
 
 /* =================== Responsive =================== */
 
+/* Tablet (< 1024px) */
+@media (max-width: 1024px) {
+  .plant-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+
+  .plant-detail {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile (< 880px) */
 @media (max-width: 880px) {
   .app-layout {
     flex-direction: column;
@@ -928,14 +940,248 @@ turbo-frame#plant_modal {
   .sidebar {
     width: 100%;
     height: auto;
-    position: static;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 12px 16px;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sidebar__brand {
+    margin-bottom: 0;
+    font-size: 1.1rem;
+  }
+
+  .sidebar__user {
+    display: none;
+  }
+
+  .sidebar__nav {
+    flex-direction: row;
+    gap: 2px;
+    flex: 1;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .sidebar__nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sidebar__link {
+    font-size: 0.8rem;
+    padding: 8px 10px;
+    white-space: nowrap;
+  }
+
+  .sidebar__footer {
+    margin-top: 0;
+  }
+
+  .sidebar__logout {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+
+  .main-content {
+    padding: 20px 16px;
+  }
+
+  .page-header__title {
+    font-size: 1.4rem;
+  }
+
+  .summary-grid {
+    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .summary-card {
+    padding: 16px;
+  }
+
+  .summary-card__value {
+    font-size: 1.5rem;
+  }
+
+  .summary-card__icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
   }
 
   .plant-detail {
     grid-template-columns: 1fr;
   }
 
+  .plant-table table {
+    min-width: 100%;
+  }
+
+  /* Tabela vira cards em mobile */
+  .plant-table {
+    display: none;
+  }
+
+  .plant-table--mobile-cards {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .modal__content {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .modal {
+    padding: 0;
+  }
+
+  .form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form__actions {
+    flex-direction: column;
+  }
+
+  .form__actions .btn {
+    width: 100%;
+  }
+
+  .care-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header__actions {
+    width: 100%;
+  }
+
+  .page-header__actions .btn {
+    flex: 1;
+  }
+}
+
+/* Touch targets acessibilidade mobile */
+@media (pointer: coarse) {
+  .btn,
+  .sidebar__link,
+  .sidebar__logout,
+  .plant-card__name a,
+  .link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .btn--icon {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .plant-card__actions .btn--icon {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Mobile pequeno (< 480px) */
+@media (max-width: 480px) {
+  .sidebar {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .sidebar__brand {
+    font-size: 0.95rem;
+  }
+
+  .sidebar__brand-icon {
+    font-size: 1.2rem;
+  }
+
+  .sidebar__link {
+    font-size: 0.75rem;
+    padding: 6px 8px;
+  }
+
+  .sidebar__logout {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+  }
+
   .main-content {
-    padding: 20px;
+    padding: 16px 12px;
+  }
+
+  .page-header__title {
+    font-size: 1.2rem;
+  }
+
+  .page-header__subtitle {
+    font-size: 0.85rem;
+  }
+
+  .summary-grid {
+    gap: 8px;
+  }
+
+  .summary-card {
+    padding: 12px;
+  }
+
+  .summary-card__value {
+    font-size: 1.3rem;
+  }
+
+  .summary-card__icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .summary-card__label {
+    font-size: 0.75rem;
+  }
+
+  .plant-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .plant-card__photo {
+    height: 140px;
+  }
+
+  .plant-card__body {
+    padding: 12px 16px 16px;
+  }
+
+  .auth-card {
+    padding: 24px 20px;
+  }
+
+  .auth-card__title {
+    font-size: 1.2rem;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header__actions {
+    flex-wrap: wrap;
   }
 }
