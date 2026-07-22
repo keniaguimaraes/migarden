@@ -13,14 +13,14 @@ class PlantTest < ActiveSupport::TestCase
     @plant.name = nil
 
     assert_not @plant.valid?
-    assert_includes @plant.errors[:name], "can't be blank"
+    assert_includes @plant.errors[:name], "não pode ficar em branco"
   end
 
   test 'invalid without plant_type' do
     @plant.plant_type = nil
 
     assert_not @plant.valid?
-    assert_includes @plant.errors[:plant_type], "can't be blank"
+    assert_includes @plant.errors[:plant_type], "não pode ficar em branco"
   end
 
   test 'invalid without sun_exposure' do
@@ -33,7 +33,7 @@ class PlantTest < ActiveSupport::TestCase
     @plant.sun_exposure = 'galatic'
 
     assert_not @plant.valid?
-    assert_includes @plant.errors[:sun_exposure], 'is not included in the list'
+    assert_includes @plant.errors[:sun_exposure], 'não está incluído na lista'
   end
 
   test 'accepts known sun_exposure values' do

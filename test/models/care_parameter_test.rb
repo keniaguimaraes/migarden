@@ -32,7 +32,7 @@ class CareParameterTest < ActiveSupport::TestCase
     duplicate = @plant.care_parameters.build(action_type: :watering, interval_days: 10)
 
     assert_not duplicate.valid?
-    assert_includes duplicate.errors[:action_type], 'has already been taken'
+    assert_includes duplicate.errors[:action_type], 'já está em uso'
   end
 
   test 'action_type enum exposes boolean predicates' do

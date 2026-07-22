@@ -1,4 +1,23 @@
 pt-BR:
+  activerecord:
+    errors:
+      messages:
+        blank: "não pode ficar em branco"
+        taken: "já está em uso"
+        inclusion: "não está incluído na lista"
+      models:
+        plant:
+          attributes:
+            name:
+              blank: "não pode ficar em branco"
+            plant_type:
+              blank: "não pode ficar em branco"
+            sun_exposure:
+              inclusion: "não está incluído na lista"
+        care_parameter:
+          attributes:
+            action_type:
+              taken: "já está em uso"
   flash:
     application:
       unauthorized: 'Você precisa estar logado para acessar esta página.'

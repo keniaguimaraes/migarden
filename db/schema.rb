@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_06_02_192059) do
+ActiveRecord::Schema[7.0].define(version: 2026_07_22_150738) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -58,6 +58,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_06_02_192059) do
     t.integer "interval_days"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["action_type", "plant_id"], name: "index_care_parameters_on_action_type_and_plant_id", unique: true
     t.index ["plant_id"], name: "index_care_parameters_on_plant_id"
   end
 
