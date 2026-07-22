@@ -8,7 +8,8 @@ Rails.application.routes.draw do
     post :trigger_reminders, on: :collection
     post :test_queue_reminder, on: :collection
   end
-  resources :alerts, only: [:index]
+  get '/calendar', to: 'calendar#index', as: :calendar
+  get '/alertas', to: redirect('/calendar')
 
   resources :plants do
     member do

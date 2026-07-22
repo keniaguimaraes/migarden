@@ -1,0 +1,139 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-header__title">Calendário</h1>
+    <p class="page-header__subtitle">Cuidados previstos para os próximos 30 dias.</p>
+  </div>
+  <%= link_to "Minhas Plantas", plants_path, class: "btn btn--ghost" %>
+</div>
+
+<section class="summary-grid">
+  <div class="card summary-card">
+    <div class="summary-card__icon summary-card__icon--water">💧</div>
+    <div class="summary-card__label">Precisam de rega hoje</div>
+    <div class="summary-card__value"><%= @counts[:watering] %></div>
+  </div>
+  <div class="card summary-card">
+    <div class="summary-card__icon summary-card__icon--fert">🧪</div>
+    <div class="summary-card__label">Precisam de fertilização hoje</div>
+    <div class="summary-card__value"><%= @counts[:fertilization] %></div>
+  </div>
+  <div class="card summary-card">
+    <div class="summary-card__icon summary-card__icon--pest">🐛</div>
+    <div class="summary-card__label">Precisam de controle de pragas hoje</div>
+    <div class="summary-card__value"><%= @counts[:pest_control] %></div>
+  </div>
+</section>
+
+<section class="calendar-section">
+  <div class="calendar-nav">
+    <%= link_to "◀", calendar_path(month: (@month - 1.month).strftime("%Y-%m"), date: nil), class: "calendar-nav__arrow" %>
+    <h2 class="calendar-nav__title"><%= @month.strftime("%B %Y") %></h2>
+    <%= link_to "▶", calendar_path(month: (@month + 1.month).strftime("%Y-%m"), date: nil), class: "calendar-nav__arrow" %>
+  </div>
+
+  <div class="calendar-grid">
+    <div class="calendar-grid__header">Dom</div>
+    <div class="calendar-grid__header">Seg</div>
+    <div class="calendar-grid__header">Ter</div>
+    <div class="calendar-grid__header">Qua</div>
+    <div class="calendar-grid__header">Qui</div>
+    <div class="calendar-grid__header">Sex</div>
+    <div class="calendar-grid__header">Sáb</div>
+
+    <% @weeks.each do |week| %>
+      <% week.each do |day| %>
+        <% in_month = day.month == @month.month %>
+        <% in_window = day >= @from_date && day <= @to_date %>
+        <% today = day == Date.current %>
+        <% selected = day == @selected_date %>
+        <% day_events = @calendar_data[day] || [] %>
+        <% has_events = day_events.any? %>
+
+        <%
+          cell_classes = "calendar-day"
+          cell_classes += " calendar-day--outside-month" unless in_month
+          cell_classes += " calendar-day--today" if today
+          cell_classes += " calendar-day--selected" if selected
+          cell_classes += " calendar-day--has-events" if has_events && in_window
+        %>
+
+        <% if in_month && in_window && has_events %>
+          <%= link_to calendar_path(month: @month.strftime("%Y-%m"), date: day.strftime("%Y-%m-%d")), class: cell_classes do %>
+            <span class="calendar-day__number"><%= day.day %></span>
+            <% if day_events.any? %>
+              <div class="calendar-day__dots">
+                <% actions = day_events.map { |e| e[:action] }.uniq %>
+                <% actions.each do |action| %>
+                  <span class="calendar-day__dot calendar-day__dot--<%= action %>"><%= Plant::CARE_ACTIONS[action][:icon] %></span>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        <% else %>
+          <div class="<%= cell_classes %>">
+            <span class="calendar-day__number"><%= day.day %></span>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</section>
+
+<% if @selected_date %>
+  <section class="day-detail card">
+    <div class="day-detail__header">
+      <h3 class="day-detail__title"><%= format_br_date(@selected_date) %></h3>
+      <%= link_to "✕", calendar_path(month: @month.strftime("%Y-%m")), class: "day-detail__close" %>
+    </div>
+
+    <% if @day_events.any? %>
+      <div class="day-detail__list">
+        <% @day_events.group_by { |e| e[:plant] }.each do |plant, events| %>
+          <div class="day-detail__plant">
+            <div class="day-detail__plant-info">
+              <% if plant.photo.attached? %>
+                <%= image_tag plant.photo.variant(:thumb), class: "day-detail__plant-photo" %>
+              <% else %>
+                <div class="day-detail__plant-photo day-detail__plant-photo--placeholder">🌿</div>
+              <% end %>
+              <div>
+                <strong class="day-detail__plant-name"><%= link_to plant.name, plant_path(plant) %></strong>
+                <div class="day-detail__plant-meta"><%= plant.plant_type %> · <%= plant.sun_exposure_label %></div>
+              </div>
+            </div>
+            <div class="day-detail__plant-cares">
+              <% events.each do |event| %>
+                <% care = Plant::CARE_ACTIONS[event[:action]] %>
+                <div class="day-detail__care-item">
+                  <span><%= care[:icon] %> <%= care[:label] %></span>
+                  <% if event[:action] == :watering && @selected_date == Date.current %>
+                    <%= button_to "Regar agora", mark_as_watered_plant_path(plant), method: :patch, class: "btn btn--primary btn--sm" %>
+                  <% elsif event[:action] == :fertilization && @selected_date == Date.current %>
+                    <%= button_to "Fertilizar agora", mark_as_fertilized_plant_path(plant), method: :patch, class: "btn btn--primary btn--sm" %>
+                  <% elsif event[:action] == :insecticide && @selected_date == Date.current %>
+                    <%= button_to "Controlar agora", mark_as_pest_controlled_plant_path(plant), method: :patch, class: "btn btn--primary btn--sm" %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="empty-state-card">
+        <div class="empty-state__icon">🌱</div>
+        <h2 class="empty-state__title">Nenhum cuidado previsto</h2>
+        <p class="empty-state__text">Nenhum cuidado previsto para este dia.</p>
+      </div>
+    <% end %>
+  </section>
+<% end %>
+
+<% if @calendar_data.empty? && @selected_date.nil? %>
+  <div class="card empty-state-card">
+    <div class="empty-state__icon">✨</div>
+    <h2 class="empty-state__title">Tudo em dia!</h2>
+    <p class="empty-state__text">Nenhuma planta precisa de cuidado nos próximos 30 dias. Aproveite seu jardim.</p>
+    <%= link_to "Ver todas as plantas", plants_path, class: "btn btn--primary" %>
+  </div>
+<% end %>

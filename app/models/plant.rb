@@ -41,6 +41,12 @@ class Plant < ApplicationRecord
     calculate_next_date(:insecticide)
   end
 
+  CARE_ACTIONS = {
+    watering: { icon: '💧', label: 'Rega' },
+    fertilization: { icon: '🧪', label: 'Fertilização' },
+    insecticide: { icon: '🐛', label: 'Controle de Pragas' }
+  }.freeze
+
   def needs_watering?
     next_watering_date <= Date.current
   end
@@ -59,6 +65,23 @@ class Plant < ApplicationRecord
 
   def care_status
     needs_any_care? ? 'atrasada' : 'em_dia'
+  end
+
+  def upcoming_care_events(from: Date.current, to: 30.days.from_now)
+    events = []
+    CARE_ACTIONS.each_key do |action_type|
+      parameter = parameter_for(action_type)
+      next unless parameter
+
+      last_log = last_care_for(action_type)
+      next_date = last_log ? last_log.performed_at.to_date + parameter.interval_days : Date.current
+
+      while next_date <= to
+        events << { date: next_date, action: action_type } if next_date >= from
+        next_date += parameter.interval_days
+      end
+    end
+    events.sort_by { |e| [e[:date], e[:action].to_s] }
   end
 
   private
