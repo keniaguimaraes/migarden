@@ -6,24 +6,25 @@ module ApplicationHelper
   end
 
   def status_badge_class(plant)
-    plant.needs_any_care? ? "badge badge--danger" : "badge badge--success"
+    plant.needs_any_care? ? 'badge badge--danger' : 'badge badge--success'
   end
 
   def status_label(plant)
-    plant.needs_any_care? ? "Precisa de cuidado" : "Em dia"
+    plant.needs_any_care? ? 'Precisa de cuidado' : 'Em dia'
   end
 
   def sun_exposure_icon(sun_exposure)
     case sun_exposure
-    when "sol" then "☀️"
-    when "meia_sombra" then "⛅"
-    when "sombra" then "🌑"
-    else "🌱"
+    when 'sol' then '☀️'
+    when 'meia_sombra' then '⛅'
+    when 'sombra' then '🌑'
+    else '🌱'
     end
   end
 
   def format_br_date(date)
-    return "—" if date.blank?
-    date.strftime("%d/%m/%Y")
+    return '—' if date.blank?
+
+    date.strftime('%d/%m/%Y')
   end
 end

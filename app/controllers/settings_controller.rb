@@ -13,7 +13,7 @@ class SettingsController < ApplicationController
     @user = current_user
 
     if @user.update(settings_params)
-      redirect_to edit_settings_path, notice: "Configurações atualizadas com sucesso."
+      redirect_to edit_settings_path, notice: t('flash.settings.updated')
     else
       render :edit, status: :unprocessable_entity
     end
@@ -21,7 +21,8 @@ class SettingsController < ApplicationController
 
   def trigger_reminders
     PlantReminderJob.perform_later
-    redirect_to edit_settings_path, notice: "Jobs de lembrete disparados com sucesso! Verifique seu WhatsApp e os logs do Worker."
+    redirect_to edit_settings_path,
+                notice: t('flash.settings.reminders_triggered')
   end
 
   def test_queue_reminder
@@ -29,28 +30,19 @@ class SettingsController < ApplicationController
     run_at = 1.minute.from_now
     PlantReminderJob.set(wait_until: run_at).perform_later
     Rails.logger.info("[TEST_QUEUE] PlantReminderJob enfileirado para #{run_at.iso8601} por #{@user.email}")
-    redirect_to edit_settings_path, notice: "Job de teste enfileirado para #{run_at.strftime('%H:%M:%S')} (aprox. 1 min). Acompanhe nos logs do Worker."
+    redirect_to edit_settings_path,
+                notice: t('flash.settings.test_queued', time: run_at.strftime('%H:%M:%S'))
   end
 
   def test_whatsapp
     @user = current_user
     Rails.logger.info("[TEST_WHATSAPP] Action called for #{@user.email}")
 
-    if @user.callmebot_phone.blank? || @user.callmebot_api_key.blank?
-      Rails.logger.warn("[TEST_WHATSAPP] Missing credentials: phone=#{@user.callmebot_phone.present?}, key=#{@user.callmebot_api_key.present?}")
-      redirect_to edit_settings_path, alert: "Preencha telefone e API key antes de testar."
-      return
-    end
+    return redirect_to(edit_settings_path, alert: t('flash.settings.missing_credentials')) unless credentials_present?
 
     message = "🌿 migarden teste\n\nSe você está lendo isto no WhatsApp, a integração com o CallMeBot está funcionando!"
     response = WhatsappNotifier.send_message(@user, message)
-
-    if response.is_a?(Net::HTTPSuccess)
-      redirect_to edit_settings_path, notice: "Mensagem de teste enviada para #{@user.callmebot_phone}."
-    else
-      status = response&.code || "?"
-      redirect_to edit_settings_path, alert: "Falha ao enviar (HTTP #{status}). Confira a API key e o telefone."
-    end
+    handle_test_response(response)
   end
 
   private
@@ -60,6 +52,19 @@ class SettingsController < ApplicationController
       :name, :email,
       :callmebot_phone, :callmebot_api_key,
       :password, :password_confirmation
-    ).delete_if { |k, v| k.in?([:password, :password_confirmation]) && v.blank? }
+    ).delete_if { |k, v| k.in?(%i[password password_confirmation]) && v.blank? }
+  end
+
+  def credentials_present?
+    @user.callmebot_phone.present? && @user.callmebot_api_key.present?
+  end
+
+  def handle_test_response(response)
+    if response.is_a?(Net::HTTPSuccess)
+      redirect_to edit_settings_path, notice: t('flash.settings.test_sent', phone: @user.callmebot_phone)
+    else
+      status = response&.code || '?'
+      redirect_to edit_settings_path, alert: t('flash.settings.test_failed', status: status)
+    end
   end
 end

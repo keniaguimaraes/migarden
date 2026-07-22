@@ -1,0 +1,21 @@
+pt-BR:
+  flash:
+    application:
+      unauthorized: 'Você precisa estar logado para acessar esta página.'
+    plants:
+      created: 'Planta cadastrada com sucesso!'
+      updated: 'Planta atualizada com sucesso!'
+      destroyed: 'Planta removida com sucesso.'
+      marked_as_watered: 'Planta marcada como regada.'
+      marked_as_fertilized: 'Planta marcada como fertilizada.'
+      marked_as_pest_controlled: 'Controle de pragas registrado.'
+    sessions:
+      invalid_credentials: 'E-mail ou senha inválidos.'
+      logged_out: 'Você saiu do sistema.'
+    settings:
+      updated: 'Configurações atualizadas com sucesso.'
+      reminders_triggered: 'Jobs de lembrete disparados com sucesso! Verifique seu WhatsApp e os logs do Worker.'
+      test_sent: 'Mensagem de teste enviada para %{phone}.'
+      test_failed: 'Falha ao enviar (HTTP %{status}). Confira a API key e o telefone.'
+      missing_credentials: 'Preencha telefone e API key antes de testar.'
+      test_queued: 'Job de teste enfileirado para %{time} (aprox. 1 min). Acompanhe nos logs do Worker.'

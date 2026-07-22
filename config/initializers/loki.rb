@@ -1,5 +1,5 @@
-if Rails.env.production? && ENV["LOKI_URL"].present?
-  require Rails.root.join("lib", "loki_logger")
+if Rails.env.production? && ENV['LOKI_URL'].present?
+  require Rails.root.join('lib/loki_logger')
 
   Rails.application.config.after_initialize do
     loki_logger = LokiLogger.new

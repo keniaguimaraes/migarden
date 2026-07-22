@@ -1,4 +1,4 @@
-require "test_helper"
+require 'test_helper'
 
 class CareLogTest < ActiveSupport::TestCase
   setup do
@@ -6,26 +6,28 @@ class CareLogTest < ActiveSupport::TestCase
     @log = care_logs(:watering_log_one)
   end
 
-  test "valid log" do
-    assert @log.valid?
+  test 'valid log' do
+    assert_predicate @log, :valid?
   end
 
-  test "invalid without action_type" do
+  test 'invalid without action_type' do
     @log.action_type = nil
-    refute @log.valid?
+
+    assert_not @log.valid?
   end
 
-  test "invalid without performed_at" do
+  test 'invalid without performed_at' do
     @log.performed_at = nil
-    refute @log.valid?
+
+    assert_not @log.valid?
   end
 
-  test "action_type enum exposes boolean predicates" do
-    assert @log.watering?
-    refute @log.fertilization?
+  test 'action_type enum exposes boolean predicates' do
+    assert_predicate @log, :watering?
+    assert_not @log.fertilization?
   end
 
-  test "destroying plant destroys its care logs" do
+  test 'destroying plant destroys its care logs' do
     plant = plants(:one)
     assert_difference -> { CareLog.count }, -plant.care_logs.count do
       plant.destroy

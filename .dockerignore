@@ -3,3 +3,4 @@ log/*
 tmp/*
 .env
 node_modules
+vendor/bundle

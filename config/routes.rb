@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  root "dashboard#index"
+  root 'dashboard#index'
 
-  resource :session, only: [:new, :create, :destroy]
-  resources :users, only: [:new, :create]
-  resource :settings, only: [:show, :edit, :update] do
+  resource :session, only: %i[new create destroy]
+  resources :users, only: %i[new create]
+  resource :settings, only: %i[show edit update] do
     post :test_whatsapp, on: :collection
     post :trigger_reminders, on: :collection
     post :test_queue_reminder, on: :collection
