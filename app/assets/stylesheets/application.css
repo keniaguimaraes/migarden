@@ -500,6 +500,14 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
   gap: 20px;
 }
 
+.plant-grid--mobile {
+  display: none;
+}
+
+.plant-table--desktop {
+  display: block;
+}
+
 .plant-card {
   display: flex;
   flex-direction: column;
@@ -1033,6 +1041,14 @@ turbo-frame#plant_modal {
     background: transparent;
     box-shadow: none;
     overflow: visible;
+  }
+
+  .plant-table--desktop {
+    display: none;
+  }
+
+  .plant-grid--mobile {
+    display: grid;
   }
 
   .modal__content {
