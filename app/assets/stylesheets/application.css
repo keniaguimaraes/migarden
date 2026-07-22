@@ -623,6 +623,10 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 
 /* =================== Plant Table (Minhas Plantas) =================== */
 
+.plant-table--mobile-cards {
+  display: none;
+}
+
 .plant-table {
   overflow-x: auto;
   width: 100%;
