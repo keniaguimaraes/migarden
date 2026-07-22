@@ -1145,6 +1145,35 @@ Tom visual:
 Natural, limpo, organizado, leve e acolhedor.
 ```
 
+---
+
+## GitHub Actions - Node 24 Migration
+
+Node 20 deprecated on GH runners since June 16, 2026. All actions must use Node 24 runtime.
+
+### Current Status
+
+`.github/workflows/ci.yml` needs updates:
+
+| Action | Current | Target | Why |
+|--------|---------|--------|-----|
+| `actions/checkout` | `@v4` | `@v7` | Node 20 → Node 24 |
+| `actions/cache` | `@v4` | `@v5` | Node 20 → Node 24 |
+| `actions/upload-artifact` | `@v4` | `@v7` | Node 20 → Node 24 |
+| `docker/setup-buildx-action` | `@v3` | `@v4` | Node 20 → Node 24 |
+| `docker/build-push-action` | `@v6` | `@v7` | Node 20 → Node 24 |
+| `ruby/setup-ruby` | `@v1` | `@v1` | Moving tag, already Node 24 |
+
+To fix: update version tags in `.github/workflows/ci.yml`.
+
+---
+
+## Dockerfile Ruby Version
+
+Current Dockerfile uses `ruby:3.3.0` and Dockerfile.prod uses `ruby:3.3.0-slim`. When upgrading Ruby, update both files.
+
+---
+
 Mensagem exemplo de lembrete:
 
 ```text
