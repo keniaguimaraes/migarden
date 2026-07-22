@@ -41,6 +41,11 @@
             edit_plant_path(plant),
             data: { turbo_frame: "plant_modal" },
             class: "btn btn--primary btn--sm" %>
+      <%= button_to "Excluir",
+            plant_path(plant),
+            method: :delete,
+            data: { turbo_confirm: "Remover #{plant.name}?" },
+            class: "btn btn--danger btn--sm" %>
     </div>
   </div>
 </article>
