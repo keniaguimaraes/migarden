@@ -36,3 +36,6 @@ vendor/bundle
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore security audit report (internal, not for public repo)
+/docs/auditoria-seguranca.md

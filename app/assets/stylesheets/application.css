@@ -54,7 +54,7 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 
 .main-content {
   flex: 1;
-  padding: 24px 8px;
+  padding: 32px 32px;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
@@ -72,7 +72,7 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 /* =================== Sidebar =================== */
 
 .sidebar {
-  width: 280px;
+  width: 320px;
   background: var(--color-deep-green);
   color: white;
   padding: 24px 20px;
@@ -436,7 +436,7 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  gap: 24px;
   margin-bottom: 32px;
 }
 
