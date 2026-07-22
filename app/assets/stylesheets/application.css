@@ -54,7 +54,7 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 
 .main-content {
   flex: 1;
-  padding: 32px 40px;
+  padding: 24px 8px;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
@@ -72,7 +72,7 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 /* =================== Sidebar =================== */
 
 .sidebar {
-  width: 260px;
+  width: 280px;
   background: var(--color-deep-green);
   color: white;
   padding: 24px 20px;
@@ -246,6 +246,13 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 .btn--sm {
   padding: 8px 14px;
   font-size: 0.85rem;
+}
+
+.btn--icon {
+  padding: 8px;
+  font-size: 1rem;
+  min-width: 36px;
+  min-height: 36px;
 }
 
 /* =================== Form =================== */
@@ -611,6 +618,82 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 .badge--danger {
   background: #fde9e8;
   color: var(--color-danger);
+}
+
+/* =================== Plant Table =================== */
+
+.plant-table {
+  overflow-x: auto;
+  width: 100%;
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+}
+
+.plant-table table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+
+.plant-table th {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--color-soft-green);
+}
+
+.plant-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-ice-white);
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.plant-table tbody tr:hover {
+  background: var(--color-ice-white);
+}
+
+.plant-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.plant-table__name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.plant-table__name-link {
+  font-weight: 600;
+  color: var(--color-deep-green);
+  text-decoration: none;
+}
+
+.plant-table__name-link:hover {
+  text-decoration: underline;
+}
+
+.plant-table__date {
+  white-space: nowrap;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.plant-table__date--attention {
+  color: var(--color-danger);
+  font-weight: 700;
+}
+
+.plant-table__actions {
+  display: flex;
+  gap: 6px;
+  white-space: nowrap;
 }
 
 /* =================== Plant Detail =================== */

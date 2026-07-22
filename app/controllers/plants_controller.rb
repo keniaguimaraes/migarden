@@ -125,7 +125,7 @@ class PlantsController < ApplicationController
   def turbo_stream_create_response(plant)
     count = current_user.plants.count
     streams = [
-      turbo_stream.append('plants_grid', partial: 'plants/plant_card', locals: { plant: plant }),
+      turbo_stream.append('plants_table', partial: 'plants/plant_row', locals: { plant: plant }),
       turbo_stream.update('plant_modal', ''),
       turbo_stream.update('plants_count', plants_count_html(count))
     ]
@@ -135,7 +135,7 @@ class PlantsController < ApplicationController
 
   def turbo_stream_update_response(plant)
     [
-      turbo_stream.replace("plant_card_#{plant.id}", partial: 'plants/plant_card', locals: { plant: plant }),
+      turbo_stream.replace("plant_row_#{plant.id}", partial: 'plants/plant_row', locals: { plant: plant }),
       turbo_stream.update('plant_modal', '')
     ]
   end

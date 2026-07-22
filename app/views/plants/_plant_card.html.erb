@@ -36,16 +36,18 @@
     </ul>
 
     <div class="plant-card__actions">
-      <%= link_to "Ver detalhes", plant_path(plant), class: "btn btn--ghost btn--sm" %>
-      <%= link_to "Editar",
+      <%= link_to "👁", plant_path(plant), class: "btn btn--ghost btn--sm btn--icon", title: "Ver detalhes" %>
+      <%= link_to "✏️",
             edit_plant_path(plant),
             data: { turbo_frame: "plant_modal" },
-            class: "btn btn--primary btn--sm" %>
-      <%= button_to "Excluir",
+            class: "btn btn--primary btn--sm btn--icon",
+            title: "Editar" %>
+      <%= button_to "🗑",
             plant_path(plant),
             method: :delete,
             data: { turbo_confirm: "Remover #{plant.name}?" },
-            class: "btn btn--danger btn--sm" %>
+            class: "btn btn--danger btn--sm btn--icon",
+            title: "Excluir" %>
     </div>
   </div>
 </article>

@@ -1,0 +1,18 @@
+<tr id="plant_row_<%= plant.id %>">
+  <td class="plant-table__name">
+    <%= link_to plant.name, plant_path(plant), class: "plant-table__name-link" %>
+  </td>
+  <td><%= plant.plant_type %></td>
+  <td><%= sun_exposure_icon(plant.sun_exposure) %> <%= plant.sun_exposure_label %></td>
+  <td class="plant-table__actions">
+    <%= link_to "Editar",
+          edit_plant_path(plant),
+          data: { turbo_frame: "plant_modal" },
+          class: "btn btn--ghost btn--sm" %>
+    <%= button_to "Excluir",
+          plant_path(plant),
+          method: :delete,
+          data: { turbo_confirm: "Remover #{plant.name}?" },
+          class: "btn btn--danger btn--sm" %>
+  </td>
+</tr>

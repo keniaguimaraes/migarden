@@ -10,10 +10,21 @@
 </div>
 
 <% if @plants.any? %>
-  <div class="plant-grid" id="plants_grid">
-    <% @plants.each do |plant| %>
-      <%= render "plant_card", plant: plant %>
-    <% end %>
+  <div class="plant-table" id="plants_table">
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Tipo</th>
+          <th>Sol</th>
+
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: "plant_row", collection: @plants, as: :plant %>
+      </tbody>
+    </table>
   </div>
 <% else %>
   <div class="card empty-state-card" id="plants_empty">
