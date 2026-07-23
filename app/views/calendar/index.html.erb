@@ -92,7 +92,7 @@
           <div class="day-detail__plant">
             <div class="day-detail__plant-info">
               <% if plant.photo.attached? %>
-                <%= image_tag plant.photo.variant(:thumb), class: "day-detail__plant-photo" %>
+                <%= image_tag plant.photo.variant(resize_to_limit: [100, 100]), class: "day-detail__plant-photo" %>
               <% else %>
                 <div class="day-detail__plant-photo day-detail__plant-photo--placeholder">🌿</div>
               <% end %>
