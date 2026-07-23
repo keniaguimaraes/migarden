@@ -25,7 +25,7 @@ class CalendarController < ApplicationController
   private
 
   def parse_month_param
-    return Date.current.beginning_of_month unless params[:month].present?
+    return Date.current.beginning_of_month if params[:month].blank?
 
     Date.parse(params[:month]).beginning_of_month
   rescue ArgumentError
@@ -33,7 +33,7 @@ class CalendarController < ApplicationController
   end
 
   def parse_date_param
-    return nil unless params[:date].present?
+    return nil if params[:date].blank?
 
     Date.parse(params[:date])
   rescue ArgumentError
