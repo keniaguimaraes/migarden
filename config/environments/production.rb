@@ -39,7 +39,7 @@ Rails.application.configure do
 
   # Store uploaded files on Cloudflare R2 (S3-compatible) in production.
   # Local disk won't persist across Railway container restarts.
-  config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", :cloudflare_r2).to_sym
+  config.active_storage.service = ENV.fetch('ACTIVE_STORAGE_SERVICE', :cloudflare_r2).to_sym
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
