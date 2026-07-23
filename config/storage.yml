@@ -28,6 +28,16 @@ local:
 #   storage_access_key: <%= Rails.application.credentials.dig(:azure_storage, :storage_access_key) %>
 #   container: your_container_name-<%= Rails.env %>
 
+# Cloudflare R2 (S3-compatible) — free tier: 10GB storage, 1M requests/month
+cloudflare_r2:
+  service: S3
+  endpoint: <%= ENV["R2_ENDPOINT"] %>
+  access_key_id: <%= ENV["R2_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["R2_SECRET_ACCESS_KEY"] %>
+  region: auto
+  bucket: <%= ENV["R2_BUCKET"] %>
+  force_path_style: true
+
 # mirror:
 #   service: Mirror
 #   primary: local

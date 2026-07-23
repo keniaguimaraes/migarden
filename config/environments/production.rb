@@ -37,8 +37,9 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  # Store uploaded files on Cloudflare R2 (S3-compatible) in production.
+  # Local disk won't persist across Railway container restarts.
+  config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", :cloudflare_r2).to_sym
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
