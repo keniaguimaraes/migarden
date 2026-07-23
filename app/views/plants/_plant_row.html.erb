@@ -1,10 +1,19 @@
 <tr id="plant_row_<%= plant.id %>">
+  <td class="plant-table__thumb">
+    <% if plant.photo.attached? %>
+      <%= image_tag plant.photo.variant(:thumb), class: "plant-table__thumb-img" %>
+    <% else %>
+      <div class="plant-table__thumb-placeholder">🌿</div>
+    <% end %>
+  </td>
   <td class="plant-table__name">
     <%= link_to plant.name, plant_path(plant), class: "plant-table__name-link" %>
   </td>
   <td><%= plant.plant_type %></td>
-  <td><%= sun_exposure_icon(plant.sun_exposure) %> <%= plant.sun_exposure_label %></td>
   <td class="plant-table__actions">
+    <%= link_to "Visualizar",
+          plant_path(plant),
+          class: "btn btn--ghost btn--sm" %>
     <%= link_to "Editar",
           edit_plant_path(plant),
           data: { turbo_frame: "plant_modal" },
