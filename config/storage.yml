@@ -37,6 +37,7 @@ cloudflare_r2:
   region: auto
   bucket: <%= ENV["R2_BUCKET"] %>
   force_path_style: true
+  compute_checksums: false
 
 # mirror:
 #   service: Mirror
