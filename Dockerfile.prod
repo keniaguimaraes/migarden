@@ -15,6 +15,7 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
     nodejs \
     npm \
     curl \
+    tzdata \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -32,6 +33,10 @@ RUN SECRET_KEY_BASE=dummy bundle exec rails assets:precompile && \
 # Cria os diretórios necessários para Puma e aplicação
 RUN mkdir -p tmp/pids log && chmod 755 tmp
 
+COPY bin/docker-entrypoint /app/bin/docker-entrypoint
+RUN chmod +x /app/bin/docker-entrypoint
+
 EXPOSE 3000
 
-CMD ["sh", "-c", "mkdir -p tmp/pids log && exec bundle exec puma -C config/puma.rb"]
+ENTRYPOINT ["bin/docker-entrypoint"]
+CMD ["web"]

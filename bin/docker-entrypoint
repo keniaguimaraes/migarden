@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e
+
+# Create DB if missing, then migrate. Web only (worker skips to avoid race).
+if [ "${RAILS_ENV}" = "production" ] && [ "${1:-web}" != "worker" ]; then
+  echo "Preparing database..."
+  bundle exec rails db:prepare
+fi
+
+case "${1:-web}" in
+  worker)
+    exec bundle exec rake solid_queue:start
+    ;;
+  *)
+    exec bundle exec puma -C config/puma.rb
+    ;;
+esac
