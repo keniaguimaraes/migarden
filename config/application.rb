@@ -16,7 +16,7 @@ module Migarden
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    config.active_job.queue_adapter = :solid_queue
+    config.active_job.queue_adapter = :async
 
     config.i18n.default_locale = :'pt-BR'
 

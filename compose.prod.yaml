@@ -15,6 +15,7 @@ x-app: &app
     R2_ACCESS_KEY_ID: ${R2_ACCESS_KEY_ID:-}
     R2_SECRET_ACCESS_KEY: ${R2_SECRET_ACCESS_KEY:-}
     R2_BUCKET: ${R2_BUCKET:-}
+    TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
     SENTRY_DSN: ${SENTRY_DSN:-}
     LOKI_URL: ${LOKI_URL:-}
     LOKI_USERNAME: ${LOKI_USERNAME:-}
@@ -25,11 +26,5 @@ services:
   web:
     <<: *app
     command: ["web"]
-
-  worker:
-    <<: *app
-    command: ["worker"]
-    depends_on:
-      - web
 
 volumes: {}

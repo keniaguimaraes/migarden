@@ -1,6 +1,4 @@
 class SettingsController < ApplicationController
-  skip_before_action :verify_authenticity_token, only: [:test_whatsapp]
-
   def show
     redirect_to edit_settings_path
   end
@@ -25,43 +23,45 @@ class SettingsController < ApplicationController
                 notice: t('flash.settings.reminders_triggered')
   end
 
-  def test_queue_reminder
+  def test_telegram
     @user = current_user
-    run_at = 1.minute.from_now
-    PlantReminderJob.set(wait_until: run_at).perform_later
-    Rails.logger.info("[TEST_QUEUE] PlantReminderJob enfileirado para #{run_at.iso8601} por #{@user.email}")
-    redirect_to edit_settings_path,
-                notice: t('flash.settings.test_queued', time: run_at.strftime('%H:%M:%S'))
+    Rails.logger.info("[TEST_TELEGRAM] Action called for #{@user.email}")
+
+    return redirect_to(edit_settings_path, alert: t('flash.settings.missing_credentials')) unless telegram_configured?
+
+    message = "🌿 migarden teste\n\nSe você está lendo isto no Telegram, a integração está funcionando!"
+    response = TelegramNotifier.send_message(@user, message)
+    handle_test_response(response)
   end
 
-  def test_whatsapp
+  def connect_telegram
     @user = current_user
-    Rails.logger.info("[TEST_WHATSAPP] Action called for #{@user.email}")
+    chat_id = TelegramNotifier.fetch_chat_id
 
-    return redirect_to(edit_settings_path, alert: t('flash.settings.missing_credentials')) unless credentials_present?
-
-    message = "🌿 migarden teste\n\nSe você está lendo isto no WhatsApp, a integração com o CallMeBot está funcionando!"
-    response = WhatsappNotifier.send_message(@user, message)
-    handle_test_response(response)
+    if chat_id.present?
+      @user.update(telegram_chat_id: chat_id)
+      redirect_to edit_settings_path, notice: t('flash.settings.telegram_connected', chat_id: chat_id)
+    else
+      redirect_to edit_settings_path, alert: t('flash.settings.telegram_not_found')
+    end
   end
 
   private
 
   def settings_params
     params.require(:user).permit(
-      :name, :email,
-      :callmebot_phone, :callmebot_api_key,
+      :name, :email, :telegram_chat_id,
       :password, :password_confirmation
     ).delete_if { |k, v| k.in?(%i[password password_confirmation]) && v.blank? }
   end
 
-  def credentials_present?
-    @user.callmebot_phone.present? && @user.callmebot_api_key.present?
+  def telegram_configured?
+    @user.telegram_chat_id.present?
   end
 
   def handle_test_response(response)
     if response.is_a?(Net::HTTPSuccess)
-      redirect_to edit_settings_path, notice: t('flash.settings.test_sent', phone: @user.callmebot_phone)
+      redirect_to edit_settings_path, notice: t('flash.settings.test_sent')
     else
       status = response&.code || '?'
       redirect_to edit_settings_path, alert: t('flash.settings.test_failed', status: status)

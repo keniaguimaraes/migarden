@@ -41,7 +41,20 @@ Tipo **Docker Compose**, arquivo `compose.prod.yaml`.
 | --- | --- |
 | PostgreSQL | Recurso `shared-postgres` no projeto `infrastructure`. Fora do compose. |
 | web (Puma) | `Dockerfile.prod`. Entrypoint roda `db:prepare` (cria banco se faltar + migrate) e sobe Puma na porta 3000. |
-| worker (Solid Queue) | Mesma imagem. Entrypoint **não** migra; só `rake solid_queue:start`. |
+
+Não há worker/fila. O único job (lembrete diário) é disparado por uma **Scheduled Task** do Coolify.
+
+## Lembrete diário (Scheduled Task)
+
+No recurso do migarden: **Configuration → Scheduled Tasks → + Add**
+
+- Name: `migarden reminders`
+- Command: `bundle exec rake migarden:reminders`
+- Frequency: `0 8 * * *`
+- Container name: `web`
+- Timeout: `300` (sobe se a coleção crescer)
+
+O `rake migarden:reminders` chama `PlantReminderService.call`, que percorre usuários/plantas e envia o WhatsApp.
 
 ## Variáveis no painel (projeto migarden)
 
@@ -51,6 +64,7 @@ Obrigatórias:
 
 - `DATABASE_URL` — internal URL do `shared-postgres` com database `migarden`
 - `SECRET_KEY_BASE` — gerar com `openssl rand -hex 64`
+- `TELEGRAM_BOT_TOKEN` — token do bot criado no @BotFather (envio dos lembretes)
 
 Fotos (reusar as do Railway/R2, sem re-upload):
 

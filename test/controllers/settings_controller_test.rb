@@ -19,8 +19,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_select 'form'
     assert_select "input[name='user[name]']"
     assert_select "input[name='user[email]']"
-    assert_select "input[name='user[callmebot_phone]']"
-    assert_select "input[name='user[callmebot_api_key]']"
+    assert_select "input[name='user[telegram_chat_id]']"
   end
 
   test 'updates name and email' do
@@ -32,19 +31,17 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'Novo Nome', @user.name
   end
 
-  test 'updates callmebot credentials' do
+  test 'updates telegram chat id' do
     patch settings_path, params: { user: {
       name: @user.name,
       email: @user.email,
-      callmebot_phone: '+5511988887777',
-      callmebot_api_key: 'newkey'
+      telegram_chat_id: '987654321'
     } }
 
     assert_redirected_to edit_settings_path
     @user.reload
 
-    assert_equal '+5511988887777', @user.callmebot_phone
-    assert_equal 'newkey', @user.callmebot_api_key
+    assert_equal '987654321', @user.telegram_chat_id
   end
 
   test 'updates password when provided' do
@@ -84,56 +81,72 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_session_path
   end
 
-  test 'test_whatsapp rejects missing credentials' do
-    @user.update!(callmebot_phone: nil, callmebot_api_key: nil)
+  test 'test_telegram rejects missing chat id' do
+    @user.update!(telegram_chat_id: nil)
     with_stubbed_notifier(->(_u, _m) { success_response }) do
-      post test_whatsapp_settings_path
+      post test_telegram_settings_path
     end
 
     assert_redirected_to edit_settings_path
-    assert_match(/Preencha telefone e API key/, flash[:alert])
+    assert_match(/Conecte o Telegram/, flash[:alert])
   end
 
-  test 'test_whatsapp succeeds with valid creds' do
-    @user.update!(callmebot_phone: '+5511999990000', callmebot_api_key: 'abc123')
+  test 'test_telegram succeeds with valid chat id' do
     with_stubbed_notifier(->(_u, _m) { success_response }) do
-      post test_whatsapp_settings_path
+      post test_telegram_settings_path
     end
 
     assert_redirected_to edit_settings_path
     assert_match(/Mensagem de teste enviada/, flash[:notice])
   end
 
-  test 'test_whatsapp reports failure on non-success response' do
-    @user.update!(callmebot_phone: '+5511999990000', callmebot_api_key: 'bad')
+  test 'test_telegram reports failure on non-success response' do
     with_stubbed_notifier(->(_u, _m) { failure_response }) do
-      post test_whatsapp_settings_path
+      post test_telegram_settings_path
     end
 
     assert_redirected_to edit_settings_path
     assert_match(/Falha ao enviar/, flash[:alert])
   end
 
-  test 'test_queue_reminder enqueues a PlantReminderJob scheduled for the future' do
-    assert_enqueued_with(job: PlantReminderJob) do
-      post test_queue_reminder_settings_path
+  test 'connect_telegram saves detected chat id' do
+    @user.update!(telegram_chat_id: nil)
+    with_stubbed_chat_id('555000111') do
+      post connect_telegram_settings_path
     end
+
     assert_redirected_to edit_settings_path
-    assert_match(/Job de teste enfileirado para/, flash[:notice])
+    assert_equal '555000111', @user.reload.telegram_chat_id
+    assert_match(/Telegram conectado/, flash[:notice])
+  end
+
+  test 'connect_telegram alerts when no message found' do
+    with_stubbed_chat_id(nil) do
+      post connect_telegram_settings_path
+    end
+
+    assert_redirected_to edit_settings_path
+    assert_match(/não encontrei/i, flash[:alert])
   end
 
   private
 
   def with_stubbed_notifier(behavior)
-    original = WhatsappNotifier.method(:send_message)
-    WhatsappNotifier.singleton_class.send(:define_method, :send_message) { |*args| behavior.call(*args) }
+    original = TelegramNotifier.method(:send_message)
+    TelegramNotifier.singleton_class.send(:define_method, :send_message) { |*args| behavior.call(*args) }
     yield
   ensure
-    if WhatsappNotifier.singleton_class.method_defined?(:send_message)
-      WhatsappNotifier.singleton_class.send(:remove_method,
-                                            :send_message)
-    end
-    WhatsappNotifier.singleton_class.send(:define_method, :send_message, original)
+    TelegramNotifier.singleton_class.send(:remove_method, :send_message)
+    TelegramNotifier.singleton_class.send(:define_method, :send_message, original)
+  end
+
+  def with_stubbed_chat_id(value)
+    original = TelegramNotifier.method(:fetch_chat_id)
+    TelegramNotifier.singleton_class.send(:define_method, :fetch_chat_id) { value }
+    yield
+  ensure
+    TelegramNotifier.singleton_class.send(:remove_method, :fetch_chat_id)
+    TelegramNotifier.singleton_class.send(:define_method, :fetch_chat_id, original)
   end
 
   def success_response
