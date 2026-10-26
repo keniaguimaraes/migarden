@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   root 'dashboard#index'
 
+  post 'dashboard/water_all', to: 'dashboard#water_all', as: :water_all_dashboard
+
   resource :session, only: %i[new create destroy]
   resources :users, only: %i[new create]
   resource :settings, only: %i[show edit update] do

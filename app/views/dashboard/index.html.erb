@@ -3,7 +3,15 @@
     <h1 class="page-header__title">Olá, <%= current_user.name %> 🌿</h1>
     <p class="page-header__subtitle">Aqui está um resumo do seu jardim hoje.</p>
   </div>
-  <%= link_to "Nova planta", new_plant_path, class: "btn btn--primary" %>
+  <div class="page-header__actions">
+    <% if @needs_watering.positive? %>
+      <%= button_to "Regar todas que precisam (#{@needs_watering})",
+            water_all_dashboard_path,
+            method: :post,
+            class: "btn btn--primary" %>
+    <% end %>
+    <%= link_to "Nova planta", new_plant_path, class: "btn btn--primary" %>
+  </div>
 </div>
 
 <section class="summary-grid">

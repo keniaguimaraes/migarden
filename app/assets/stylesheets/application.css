@@ -73,10 +73,10 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 /* =================== Sidebar =================== */
 
 .sidebar {
-  width: 320px;
+  width: 220px;
   background: var(--color-deep-green);
   color: white;
-  padding: 24px 20px;
+  padding: 18px 14px;
   display: flex;
   flex-direction: column;
   position: sticky;
@@ -87,10 +87,10 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
 .sidebar__brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 1.4rem;
+  gap: 8px;
+  font-size: 1.1rem;
   font-weight: 700;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   letter-spacing: 0.5px;
 }
 
@@ -117,9 +117,9 @@ h1, h2, h3 { color: var(--color-deep-green); margin: 0; }
   display: block;
   color: white;
   text-decoration: none;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: var(--radius-md);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   transition: background 0.15s ease;
 }
 

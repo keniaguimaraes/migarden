@@ -73,12 +73,13 @@ class Plant < ApplicationRecord
       parameter = parameter_for(action_type)
       next unless parameter
 
+      interval = watering_adjusted_interval(action_type, parameter.interval_days)
       last_log = last_care_for(action_type)
-      next_date = last_log ? last_log.performed_at.to_date + parameter.interval_days : Date.current
+      next_date = last_log ? last_log.performed_at.to_date + interval : Date.current
 
       while next_date <= to
         events << { date: next_date, action: action_type } if next_date >= from
-        next_date += parameter.interval_days
+        next_date += interval
       end
     end
     events.sort_by { |e| [e[:date], e[:action].to_s] }
@@ -93,6 +94,13 @@ class Plant < ApplicationRecord
     last_log = last_care_for(action_type)
     return Date.current unless last_log
 
-    last_log.performed_at + parameter.interval_days.days
+    interval = watering_adjusted_interval(action_type, parameter.interval_days)
+    last_log.performed_at + interval.days
+  end
+
+  def watering_adjusted_interval(action_type, base_interval)
+    return base_interval unless action_type == :watering
+
+    WeatherService.adjusted_watering_interval(base_interval)
   end
 end
